@@ -131,6 +131,14 @@ nav.tabs button[aria-current="page"]{color:var(--primary);font-weight:700}
 .sheet{background:var(--surface);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:20px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px;max-height:90%;overflow:auto}
 .timer{font-family:var(--display);font-weight:300;font-size:64px;letter-spacing:-.02em;text-align:center;font-variant-numeric:tabular-nums;direction:ltr}
 .toast{position:fixed;bottom:calc(84px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--text);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:30;font-size:14px;max-width:90%;text-align:center}
+.iconbtn{width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text2);display:grid;place-items:center;flex:none}
+.iconbtn.sm{width:36px;height:36px}
+.contacts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.contact{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-decoration:none;font-size:13px;padding:10px 6px}
+.contact.wa{background:#1F9D55;color:#fff}
+.contact.soft{background:var(--primary-soft);color:var(--primary)}
+.kv{display:grid;grid-template-columns:52px 1fr auto;gap:8px;align-items:center;border-top:1px solid var(--border);padding-top:10px}
+.kv .sel{user-select:all;font-size:13.5px;font-variant-numeric:tabular-nums;text-align:right;min-width:0;overflow-wrap:anywhere}
 .iconprev{width:56px;height:56px;border-radius:14px;overflow:hidden;flex:none}
 .iconprev svg{width:100%;height:100%}
 .onb{min-height:100%;display:flex;flex-direction:column;gap:18px;padding-block:24px;max-width:520px;margin:0 auto}
@@ -254,6 +262,7 @@ function setIcon(md){const el=document.getElementById("favicon");el.href="data:i
 /* ---------- render ---------- */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function selectNear(b){const s=b.parentElement.querySelector(".sel");if(!s)return;const r=document.createRange();r.selectNodeContents(s);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);toast("حدّد النص وانسخه")}
 function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),2600)}
 function avatar(){return S.photo?`<div class="avatar"><img src="${S.photo}" alt=""></div>`:`<div class="avatar">${esc(S.name.trim()[0]||"؟")}</div>`}
 
@@ -261,7 +270,7 @@ function render(){
   document.documentElement.dir="rtl";document.documentElement.lang="ar";
   if(!S){renderOnb();setIcon("happy");return}
   const md=mood();setIcon(md);
-  const views={home:vHome,plan:vPlan,subjects:vSubjects,progress:vProgress,settings:vSettings};
+  const views={home:vHome,plan:vPlan,subjects:vSubjects,progress:vProgress,settings:vSettings,about:vAbout};
   $("#root").innerHTML=`<main class="app">${views[ui.tab]()}</main>${nav()}`;
   bind();nativeSync();
 }
@@ -275,7 +284,7 @@ function vHome(){
   const greet=t.getHours()<12?"صباح الخير":t.getHours()<18?"مرحباً":"مساء الخير";
   return `
   <div class="row">${avatar()}<div class="grow"><div class="tiny">${greet}</div><h2>أهلاً ${esc(S.name)} 👋</h2></div>
-    <div class="iconprev" title="أيقونة التطبيق الآن">${ICONS[md]}</div></div>
+    <button class="iconbtn" data-tab="about" aria-label="عن التطبيق والتواصل">${INFO_ICON}</button></div>
   <section class="hero mood-${md} pop"><div class="mascot">${MASCOT[md]}</div>
     <div class="col" style="gap:6px"><h1>${md==="happy"?"فنّوك فرحان بيك!":md==="neutral"?"فنّوك مستنّيك":md==="worried"?"فنّوك قلقان شوية":"فنّوك ناعس بلا بيك"}</h1><p>${esc(heroMessage(md))}</p></div></section>
   ${cdCard()}
@@ -364,6 +373,7 @@ function subjMinutes(){const m={};Object.values(S.log).forEach(l=>(l.items||[]).
 function vSettings(){
   const st=stream();
   return `<h1>الإعدادات</h1>
+  <button class="opt" data-tab="about"><span class="iconbtn" style="pointer-events:none">${INFO_ICON}</span><span class="grow"><b>عن التطبيق والمطوّر</b><span class="small muted">تواصل مع أستاذ للدراسة عن بعد</span></span><span class="muted">‹</span></button>
   <section class="card col">
     <div class="row">${avatar()}<div class="grow"><b>${esc(S.name)}</b><div class="tiny">${esc(st.name_ar)}${S.option?" · "+esc(S.option):""}</div></div></div>
     <div class="field"><label for="s-name">الاسم</label><input id="s-name" type="text" value="${esc(S.name)}" maxlength="30"></div>
@@ -389,6 +399,38 @@ function vSettings(){
   <section class="card col"><h3>البيانات</h3><p class="tiny">نجّحني باك · رفيقك فنّوك</p><p class="tiny">كل بياناتك محفوظة على هاتفك فقط، والتطبيق يعمل بدون إنترنت.</p>
     ${ui.confirmReset?`<p class="small">متأكد؟ سيُحذف كل تقدمك.</p><div class="row"><button class="btn" style="background:var(--danger);color:#fff" id="s-reset2">نعم، احذف</button><button class="btn ghost" id="s-cancel">إلغاء</button></div>`:`<button class="btn ghost" id="s-reset">البدء من جديد</button>`}
   </section>`;
+}
+
+/* ---------- about & contact ---------- */
+const INFO_ICON='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg>';
+const DEV={name:"حسام الدين خماري",city:"باتنة، الجزائر"};
+const TUTOR={name:"الأستاذ أسامة حماش",latin:"Oussama Hemache",phone:"+213772083471",phoneShow:"+213 772 08 34 71",wa:"213772083471",email:"oussamahamache1@gmail.com"};
+const ICO={phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',wa:'<path d="M4 20l1.3-3.9A8.5 8.5 0 1 1 8 19.1z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2z"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>'};
+const ico=k=>`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[k]}</svg>`;
+function vAbout(){
+  return `<div class="row"><button class="btn ghost" data-tab="${ui.back||"home"}" style="min-height:40px;padding:6px 14px">› رجوع</button></div>
+  <section class="card col" style="align-items:center;text-align:center;gap:6px">
+    <div class="iconprev" style="width:72px;height:72px;border-radius:18px">${ICONS.happy}</div>
+    <h2>نجّحني باك</h2><p class="small muted">رفيقك فنّوك في مراجعة البكالوريا · الإصدار 1.0</p>
+  </section>
+  <section class="card col tutor">
+    <div class="row"><div class="avatar" style="background:var(--primary-soft);color:var(--primary)">أ</div>
+      <div class="grow"><span class="chip" style="background:var(--accent-soft);color:var(--warning)">دراسة عن بعد</span><h3 style="margin-top:4px">${TUTOR.name}</h3><div class="tiny" dir="ltr" style="text-align:right">${TUTOR.latin}</div></div></div>
+    <p class="small muted">تحتاج شرحاً لدرس صعب أو متابعة شخصية قبل الباك؟ تواصل مع الأستاذ مباشرة لتنظيم حصص عن بعد.</p>
+    <div class="contacts">
+      <a class="btn contact" href="tel:${TUTOR.phone}">${ico("phone")}اتصال</a>
+      <a class="btn contact wa" href="https://wa.me/${TUTOR.wa}?text=${encodeURIComponent("السلام عليكم أستاذ، أنا "+S.name+" من تطبيق نجّحني باك، أريد الاستفسار عن الدراسة عن بعد.")}" target="_blank" rel="noopener">${ico("wa")}واتساب</a>
+      <a class="btn contact soft" href="mailto:${TUTOR.email}?subject=${encodeURIComponent("دراسة عن بعد - نجّحني باك")}">${ico("mail")}بريد</a>
+    </div>
+    <div class="kv"><span class="tiny">الهاتف</span><span dir="ltr" class="sel">${TUTOR.phoneShow}</span><button class="iconbtn sm" data-copy="${TUTOR.phone}" aria-label="نسخ الرقم">${ico("copy")}</button></div>
+    <div class="kv"><span class="tiny">البريد</span><span dir="ltr" class="sel">${TUTOR.email}</span><button class="iconbtn sm" data-copy="${TUTOR.email}" aria-label="نسخ البريد">${ico("copy")}</button></div>
+  </section>
+  <section class="card col">
+    <h3>عن المطوّر</h3>
+    <div class="row"><div class="avatar">ح</div><div class="grow"><b>${DEV.name}</b><div class="tiny">${DEV.city}</div></div></div>
+    <p class="small muted">صُمّم هذا التطبيق لمساعدة تلاميذ البكالوريا في الجزائر على المراجعة بانتظام، مجاناً وبدون إنترنت.</p>
+  </section>
+  <p class="tiny" style="text-align:center">مستقبلك بين يديك 🦊</p>`;
 }
 
 /* ---------- onboarding ---------- */
@@ -440,7 +482,9 @@ function bindOnb(){
 
 /* ---------- main bindings ---------- */
 function bind(){
-  document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{ui.tab=b.dataset.tab;ui.confirmReset=false;render();window.scrollTo(0,0)});
+  document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{if(b.dataset.tab==="about"&&ui.tab!=="about")ui.back=ui.tab;ui.tab=b.dataset.tab;ui.confirmReset=false;render();window.scrollTo(0,0)});
+  document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{const v=b.dataset.copy;const done=()=>toast("تم النسخ: "+v);
+    try{navigator.clipboard.writeText(v).then(done).catch(()=>selectNear(b))}catch(e){selectNear(b)}});
   document.querySelectorAll("[data-start]").forEach(b=>b.onclick=()=>openTimer(b.dataset.start));
   document.querySelectorAll("[data-undo]").forEach(b=>b.onclick=()=>{const k=b.dataset.undo;const day=k.split("#")[0];const l=S.log[day];if(!l)return;
     const it=(l.items||[]).find(i=>i.key===k);l.done=l.done.filter(x=>x!==k);if(it){l.min-=it.min;l.items=l.items.filter(i=>i.key!==k)}save();render()});
