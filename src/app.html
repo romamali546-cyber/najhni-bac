@@ -374,7 +374,7 @@ function subjMinutes(){const m={};Object.values(S.log).forEach(l=>(l.items||[]).
 function vSettings(){
   const st=stream();
   return `<h1>الإعدادات</h1>
-  <button class="opt" data-tab="about"><span class="iconbtn" style="pointer-events:none">${INFO_ICON}</span><span class="grow"><b>عن التطبيق والمطوّر</b><span class="small muted">تواصل مع أستاذ للدراسة عن بعد</span></span><span class="muted">‹</span></button>
+  <button class="opt" data-tab="about"><span class="iconbtn" style="pointer-events:none">${INFO_ICON}</span><span class="grow"><b>عن التطبيق والمطوّر</b><span class="small muted">تواصل مع Oussama Hemache للدراسة عن بعد</span></span><span class="muted">‹</span></button>
   <section class="card col">
     <div class="row">${avatar()}<div class="grow"><b>${esc(S.name)}</b><div class="tiny">${esc(st.name_ar)}${S.option?" · "+esc(S.option):""}</div></div></div>
     <div class="field"><label for="s-name">الاسم</label><input id="s-name" type="text" value="${esc(S.name)}" maxlength="30"></div>
@@ -404,8 +404,7 @@ function vSettings(){
 
 /* ---------- about & contact ---------- */
 const INFO_ICON='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg>';
-const DEV={name:"حسام الدين خماري",city:"باتنة، الجزائر"};
-const TUTOR={name:"الأستاذ أسامة حماش",latin:"Oussama Hemache",phone:"+213772083471",phoneShow:"+213 772 08 34 71",wa:"213772083471",email:"oussamahamache1@gmail.com"};
+const TUTOR={name:"Oussama Hemache",latin:"مطوّر التطبيق · أستاذ للدراسة عن بعد",phone:"+213772083471",phoneShow:"+213 772 08 34 71",wa:"213772083471",email:"oussamahamache1@gmail.com"};
 const ICO={phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',wa:'<path d="M4 20l1.3-3.9A8.5 8.5 0 1 1 8 19.1z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 1a4 4 0 0 1-2-2l1-1-1-2z"/>',mail:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>',copy:'<rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>'};
 const ico=k=>`<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[k]}</svg>`;
 function vAbout(){
@@ -415,9 +414,9 @@ function vAbout(){
     <h2>نجّحني باك</h2><p class="small muted">رفيقك فنّوك في مراجعة البكالوريا · الإصدار 1.0</p>
   </section>
   <section class="card col tutor">
-    <div class="row"><div class="avatar" style="background:var(--primary-soft);color:var(--primary)">أ</div>
-      <div class="grow"><span class="chip" style="background:var(--accent-soft);color:var(--warning)">دراسة عن بعد</span><h3 style="margin-top:4px">${TUTOR.name}</h3><div class="tiny" dir="ltr" style="text-align:right">${TUTOR.latin}</div></div></div>
-    <p class="small muted">تحتاج شرحاً لدرس صعب أو متابعة شخصية قبل الباك؟ تواصل مع الأستاذ مباشرة لتنظيم حصص عن بعد.</p>
+    <div class="row"><div class="avatar" style="background:var(--primary-soft);color:var(--primary)">O</div>
+      <div class="grow"><span class="chip" style="background:var(--accent-soft);color:var(--warning)">المطوّر · دراسة عن بعد</span><h3 style="margin-top:4px">${TUTOR.name}</h3><div class="tiny">${TUTOR.latin}</div></div></div>
+    <p class="small muted">صمّمتُ نجّحني باك لمساعدة تلاميذ البكالوريا في الجزائر على المراجعة بانتظام، مجاناً وبدون إنترنت. تحتاج شرحاً لدرس صعب أو متابعة شخصية قبل الباك؟ تواصل معي مباشرة لتنظيم حصص عن بعد.</p>
     <div class="contacts">
       <a class="btn contact" href="tel:${TUTOR.phone}">${ico("phone")}اتصال</a>
       <a class="btn contact wa" href="https://wa.me/${TUTOR.wa}?text=${encodeURIComponent("السلام عليكم أستاذ، أنا "+S.name+" من تطبيق نجّحني باك، أريد الاستفسار عن الدراسة عن بعد.")}" target="_blank" rel="noopener">${ico("wa")}واتساب</a>
@@ -425,11 +424,6 @@ function vAbout(){
     </div>
     <div class="kv"><span class="tiny">الهاتف</span><span dir="ltr" class="sel">${TUTOR.phoneShow}</span><button class="iconbtn sm" data-copy="${TUTOR.phone}" aria-label="نسخ الرقم">${ico("copy")}</button></div>
     <div class="kv"><span class="tiny">البريد</span><span dir="ltr" class="sel">${TUTOR.email}</span><button class="iconbtn sm" data-copy="${TUTOR.email}" aria-label="نسخ البريد">${ico("copy")}</button></div>
-  </section>
-  <section class="card col">
-    <h3>عن المطوّر</h3>
-    <div class="row"><div class="avatar">ح</div><div class="grow"><b>${DEV.name}</b><div class="tiny">${DEV.city}</div></div></div>
-    <p class="small muted">صُمّم هذا التطبيق لمساعدة تلاميذ البكالوريا في الجزائر على المراجعة بانتظام، مجاناً وبدون إنترنت.</p>
   </section>
   <p class="tiny" style="text-align:center">مستقبلك بين يديك 🦊</p>`;
 }
