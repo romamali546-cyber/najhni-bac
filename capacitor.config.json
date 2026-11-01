@@ -1,0 +1,9 @@
+{
+  "appId": "com.najahni.bac",
+  "appName": "نجّحني باك",
+  "webDir": "www",
+  "android": { "backgroundColor": "#F3F5F4" },
+  "plugins": {
+    "LocalNotifications": { "smallIcon": "ic_stat_fennouk", "iconColor": "#0A7458" }
+  }
+}

@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+<title>Fennouk - sad</title>
+<path d="M46 200 Q48 160 100 156 Q152 160 154 200 Z" fill="#F0A85A" stroke="#4A2C17" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M78 200 Q80 176 100 172 Q120 176 122 200 Z" fill="#FFF4E3"/>
+<path d="M58 160 Q100 178 142 160 L146 172 Q100 194 54 172 Z" fill="#0E8A6A" stroke="#4A2C17" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M60 166 Q100 182 140 166" fill="none" stroke="#3FB892" stroke-width="3" stroke-linecap="round"/>
+<path d="M122 176 L134 200 L118 200 L112 180 Z" fill="#0E8A6A" stroke="#4A2C17" stroke-width="3.5" stroke-linejoin="round"/>
+<g><g transform="rotate(-24 72 88)">
+      <path d="M56 98 Q30 52 36 18 Q70 36 92 82 Z" fill="#F0A85A" stroke="#4A2C17" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M61 90 Q44 58 45 33 Q67 48 84 82 Z" fill="#FFD9B8"/>
+    </g></g><g transform="translate(200 0) scale(-1 1)"><g transform="rotate(-24 72 88)">
+      <path d="M56 98 Q30 52 36 18 Q70 36 92 82 Z" fill="#F0A85A" stroke="#4A2C17" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M61 90 Q44 58 45 33 Q67 48 84 82 Z" fill="#FFD9B8"/>
+    </g></g>
+<g transform="rotate(38 150 70)">
+  <rect x="146" y="40" width="10" height="44" rx="2" fill="#F6C343" stroke="#4A2C17" stroke-width="2.5"/>
+  <rect x="146" y="36" width="10" height="8" rx="2" fill="#F28B9B" stroke="#4A2C17" stroke-width="2.5"/>
+  <path d="M146 84 L151 96 L156 84 Z" fill="#FBE3C0" stroke="#4A2C17" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M149.3 92 L151 96 L152.7 92 Z" fill="#4A2C17"/>
+</g>
+<path d="M100 66 C134 66 156 88 156 118 C156 146 132 164 100 164 C68 164 44 146 44 118 C44 88 66 66 100 66 Z"
+  fill="#F0A85A" stroke="#4A2C17" stroke-width="3.5"/>
+<path d="M100 100 C82 96 60 106 57 126 C56 147 78 160 100 160 C122 160 144 147 143 126 C140 106 118 96 100 100 Z" fill="#FFF4E3"/>
+<path d="M92 70 Q100 82 108 70" fill="none" stroke="#D98A3D" stroke-width="3" stroke-linecap="round"/>
+<circle cx="80" cy="116" r="15" fill="#FFFFFF" fill-opacity="0.55"/><circle cx="120" cy="116" r="15" fill="#FFFFFF" fill-opacity="0.55"/>
+<path d="M68 94 Q78 92 88 88" fill="none" stroke="#D98A3D" stroke-width="4" stroke-linecap="round"/><path d="M132 94 Q122 92 112 88" fill="none" stroke="#D98A3D" stroke-width="4" stroke-linecap="round"/>
+<g fill="none" stroke="#2A1A10" stroke-width="4" stroke-linecap="round">
+  <path d="M72 116 Q80 123 88 116"/><path d="M112 116 Q120 123 128 116"/></g>
+<path d="M127 132 Q122 141 127 145 Q132 141 127 132 Z" fill="#8FD3F4" stroke="#4A2C17" stroke-width="1.6"/>
+<g fill="none" stroke="#1B2340" stroke-width="4" stroke-linecap="round">
+  <circle cx="80" cy="116" r="15"/>
+  <circle cx="120" cy="116" r="15"/>
+  <path d="M95 114 Q100 109 105 114"/>
+  <path d="M65 113 L52 109"/><path d="M135 113 L148 109"/>
+</g>
+<path d="M93 133 Q100 128 107 133 Q104 140 100 140 Q96 140 93 133 Z" fill="#2A1A10"/>
+<circle cx="97.5" cy="132.5" r="1.6" fill="#FFFFFF" fill-opacity="0.7"/>
+<path d="M100 140 L100 144" stroke="#2A1A10" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M91 152 Q100 144 109 152" fill="none" stroke="#2A1A10" stroke-width="3" stroke-linecap="round"/>
+<g fill="#1B2340" font-family="Arial, Helvetica, sans-serif" font-weight="700" stroke="#FFFFFF" stroke-width="1.2" paint-order="stroke">
+  <text x="28" y="66" font-size="20">z</text><text x="14" y="48" font-size="15">z</text></g>
+</svg>

@@ -1,0 +1,18 @@
+{
+  "name": "najahni-bac",
+  "version": "1.0.0",
+  "private": true,
+  "description": "نجّحني باك - تطبيق مراجعة البكالوريا مع فنّوك",
+  "scripts": {
+    "build:web": "python3 tools/build_web.py",
+    "sync": "npm run build:web && npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.3",
+    "@capacitor/cli": "8.5.3",
+    "@capacitor/core": "8.5.3",
+    "@capacitor/local-notifications": "8.3.1",
+    "@fontsource/ibm-plex-sans-arabic": "5.2.5",
+    "@fontsource/readex-pro": "5.2.5"
+  }
+}
