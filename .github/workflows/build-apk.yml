@@ -5,6 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,3 +42,15 @@ jobs:
         with:
           name: najahni-bac-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
+
+      - name: Rename APK
+        run: cp android/app/build/outputs/apk/debug/app-debug.apk najahni-bac.apk
+
+      - name: Publish APK as the latest release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: نجّحني باك (آخر نسخة)
+          body: "حمّل ملف najahni-bac.apk وثبّته على هاتفك. تُحدَّث هذه النسخة تلقائياً مع كل تعديل."
+          files: najahni-bac.apk
+          make_latest: true
