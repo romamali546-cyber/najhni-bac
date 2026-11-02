@@ -1,0 +1,717 @@
+{
+  "sites": [
+    {
+      "id": "eddirasa",
+      "name_ar": "موقع الدراسة الجزائري",
+      "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/",
+      "has_solutions": true
+    },
+    {
+      "id": "dzexams_pro",
+      "name_ar": "DzExams.pro - فروض واختبارات ومواضيع البكالوريا بالحل",
+      "url": "https://www.dzexams.pro/ar/bac",
+      "has_solutions": true
+    }
+  ],
+  "links": {
+    "sciences": {
+      "svt": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/sciences/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=science",
+          "level": "subject"
+        }
+      ],
+      "physics": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/physics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=physique",
+          "level": "subject"
+        }
+      ],
+      "math": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/mathematics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=math",
+          "level": "subject"
+        }
+      ],
+      "arabic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/arabic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=arabe",
+          "level": "subject"
+        }
+      ],
+      "philosophy": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/philosophy/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=phylo",
+          "level": "subject"
+        }
+      ],
+      "french": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/french/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=fr",
+          "level": "subject"
+        }
+      ],
+      "english": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/english/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=eng",
+          "level": "subject"
+        }
+      ],
+      "history_geo": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/history-geography/",
+          "level": "subject"
+        }
+      ],
+      "islamic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/islamic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=islam",
+          "level": "subject"
+        }
+      ]
+    },
+    "math": {
+      "math": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/mathematics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=math",
+          "level": "subject"
+        }
+      ],
+      "physics": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/physics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=physique",
+          "level": "subject"
+        }
+      ],
+      "svt": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/sciences/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=science",
+          "level": "subject"
+        }
+      ],
+      "arabic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/arabic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=arabe",
+          "level": "subject"
+        }
+      ],
+      "philosophy": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/philosophy/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=phylo",
+          "level": "subject"
+        }
+      ],
+      "french": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/french/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=fr",
+          "level": "subject"
+        }
+      ],
+      "english": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/english/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=eng",
+          "level": "subject"
+        }
+      ],
+      "history_geo": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/history-geography/",
+          "level": "subject"
+        }
+      ],
+      "islamic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/islamic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=islam",
+          "level": "subject"
+        }
+      ]
+    },
+    "tech_math": {
+      "technology": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/civil-engineering/",
+          "level": "subject",
+          "option_ar": "هندسة مدنية"
+        },
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/mechanical-engineering/",
+          "level": "subject",
+          "option_ar": "هندسة ميكانيكية"
+        },
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/electrical-engineering/",
+          "level": "subject",
+          "option_ar": "هندسة كهربائية"
+        },
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/process-engineering/",
+          "level": "subject",
+          "option_ar": "هندسة الطرائق"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=g-m",
+          "level": "subject",
+          "option_ar": "هندسة ميكانيكية"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac.php?mod=g-e",
+          "level": "subject",
+          "option_ar": "هندسة كهربائية"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac.php?mod=g-p",
+          "level": "subject",
+          "option_ar": "هندسة الطرائق"
+        }
+      ],
+      "math": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/mathematics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=math",
+          "level": "subject"
+        }
+      ],
+      "physics": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/physics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=physique",
+          "level": "subject"
+        }
+      ],
+      "arabic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/arabic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=arabe",
+          "level": "subject"
+        }
+      ],
+      "philosophy": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/philosophy/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=phylo",
+          "level": "subject"
+        }
+      ],
+      "french": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/french/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=fr",
+          "level": "subject"
+        }
+      ],
+      "english": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/english/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=eng",
+          "level": "subject"
+        }
+      ],
+      "history_geo": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/history-geography/",
+          "level": "subject"
+        }
+      ],
+      "islamic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/islamic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=islam",
+          "level": "subject"
+        }
+      ]
+    },
+    "management_economics": {
+      "accounting": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/accounting-management/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://dzexams.pro/ar/bac.php?mod=gestion",
+          "level": "subject"
+        }
+      ],
+      "economics": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/economics-management/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=economie",
+          "level": "subject"
+        }
+      ],
+      "math": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/mathematics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=math",
+          "level": "subject"
+        }
+      ],
+      "history_geo": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/history-geography/",
+          "level": "subject"
+        }
+      ],
+      "arabic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/arabic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=arabe",
+          "level": "subject"
+        }
+      ],
+      "law": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/law/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=loi",
+          "level": "subject"
+        }
+      ],
+      "philosophy": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/philosophy/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=phylo",
+          "level": "subject"
+        }
+      ],
+      "french": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/french/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=fr",
+          "level": "subject"
+        }
+      ],
+      "english": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/english/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=eng",
+          "level": "subject"
+        }
+      ],
+      "islamic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/islamic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=islam",
+          "level": "subject"
+        }
+      ]
+    },
+    "letters_philosophy": {
+      "philosophy": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/philosophy/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=phylo",
+          "level": "subject"
+        }
+      ],
+      "arabic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/arabic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=arabe",
+          "level": "subject"
+        }
+      ],
+      "history_geo": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/history-geography/",
+          "level": "subject"
+        }
+      ],
+      "french": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/french/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=fr",
+          "level": "subject"
+        }
+      ],
+      "english": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/english/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=eng",
+          "level": "subject"
+        }
+      ],
+      "math": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/mathematics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=math",
+          "level": "subject"
+        }
+      ],
+      "islamic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/islamic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=islam",
+          "level": "subject"
+        }
+      ]
+    },
+    "foreign_languages": {
+      "french": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/french/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=fr",
+          "level": "subject"
+        }
+      ],
+      "english": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/english/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=eng",
+          "level": "subject"
+        }
+      ],
+      "arabic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/arabic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=arabe",
+          "level": "subject"
+        }
+      ],
+      "third_language": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/german/",
+          "level": "subject",
+          "option_ar": "الألمانية"
+        },
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/spanish/",
+          "level": "subject",
+          "option_ar": "الإسبانية"
+        },
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/italian/",
+          "level": "subject",
+          "option_ar": "الإيطالية"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac.php?mod=germany",
+          "level": "subject",
+          "option_ar": "الألمانية"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=spain",
+          "level": "subject",
+          "option_ar": "الإسبانية"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac.php?mod=italy",
+          "level": "subject",
+          "option_ar": "الإيطالية"
+        }
+      ],
+      "philosophy": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/philosophy/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=phylo",
+          "level": "subject"
+        }
+      ],
+      "history_geo": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/history-geography/",
+          "level": "subject"
+        }
+      ],
+      "math": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/mathematics/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=math",
+          "level": "subject"
+        }
+      ],
+      "islamic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/islamic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=islam",
+          "level": "subject"
+        }
+      ]
+    },
+    "arts": {
+      "arts": [],
+      "arabic": [],
+      "philosophy": [],
+      "history_geo": [],
+      "math": [],
+      "french": [],
+      "english": [],
+      "islamic": [
+        {
+          "site": "eddirasa",
+          "url": "https://eddirasa.com/ens-sec/3as/bac-solutions/subject/islamic/",
+          "level": "subject"
+        },
+        {
+          "site": "dzexams_pro",
+          "url": "https://www.dzexams.pro/ar/bac?mod=islam",
+          "level": "subject"
+        }
+      ]
+    }
+  },
+  "checked_on": "2026-11-03",
+  "notes": [
+    "Primary site: eddirasa.com. Its /bac-solutions/subject/<slug>/ pages list every BAC session 2008-2026 for one subject, each with a 'الموضوع' link and a 'التصحيح' link. A page covers ALL streams that sit that subject, grouped under stream labels (e.g. arabic/french/english: 'الشعب العلمية', 'آداب وفلسفة', 'لغات أجنبية'; physics: 'علوم تجريبية' and 'رياضيات وتقني رياضي'; philosophy: 'رياضيات وعلوم تجريبية', 'تسيير واقتصاد وتقني رياضي', 'آداب وفلسفة', 'لغات أجنبية'). The app should tell the student to scroll to their stream's section. 'level: subject' here means a subject page for every stream, not a page filtered to one stream; neither site has stream+subject pages.",
+    "eddirasa per-year per-stream pages also exist, e.g. https://eddirasa.com/ens-sec/3as/bac-solutions/bac-2026/sciences/ (slugs: sciences, mathematics, technical-mathematics, management-economics, literature-philosophy, foreign-languages). Each covers one session only, so they were not used as stream-level links. They could serve as a 'latest session' shortcut.",
+    "Fallback site: dzexams.pro (the old dzexams.com could not be fetched). Its subject pages /ar/bac?mod=<code> list 2008-2026 with a 'الحل' link per year (ministerial plus detailed solution, as the site describes it). WARNING: while checking, query-string URLs sometimes came back with the wrong subject: bac.php?mod=fr|eng|hist showed the physics page, bac?mod=hist showed Islamic studies, and one fetch of bac?mod=gestion showed Italian. Every dzexams URL kept here showed the right subject heading at least once. Even so, a periodic re-check is recommended, and dzexams should stay the fallback.",
+    "Mixed URL forms on dzexams: the accounting, g-e, g-p, germany and italy entries use the bac.php?mod= form that was actually fetched. The site's canonical form is https://www.dzexams.pro/ar/bac?mod=<code> (gestion, g-e, g-p, germany, italy).",
+    "Unverified, so left out: dzexams history-geography (https://www.dzexams.pro/ar/bac?mod=hist and bac.php?mod=hist both served a different subject); dzexams civil engineering (bac.php?mod=g-c served the BAC hub page); dzexams arts (bac.php?mod=dessin served the hub page; it is an arts-education section, not the BAC arts stream).",
+    "Arts stream (شعبة فنون): neither eddirasa nor dzexams has an arts-stream section, and their subject pages carry no arts-stream label. a-onec.com has arts pages (https://www.a-onec.com/2026/06/bac-Arts.html, https://www.a-onec.com/2025/06/bac-Arts.html), but the subject table has no hrefs and actually shows 2024 labels, so nothing was linked. Only arts/islamic is filled (the Islamic sciences paper is labelled 'كل الشعب' / 'جميع الشعب'). All other arts subjects are empty arrays and need a source later.",
+    "technology (تقني رياضي) and third_language (لغات أجنبية) have one entry per option, with an extra 'option_ar' field (engineering branch / language). eddirasa covers all 4 engineering branches and all 3 languages (Italian only from 2015). dzexams covers 3 engineering branches (no civil) and all 3 languages.",
+    "The svt link for the math stream is correct: both sites' SVT pages have a 'شعبة رياضيات' section. Islamic sciences is one common paper for all streams on both sites.",
+    "Other sites seen but not used: a-onec.com (one page per year and stream, e.g. https://www.a-onec.com/2024/06/bac-exam-sience.html, with correction links); bac-algerie.net (one page per stream with a PDF per session, e.g. https://bac-algerie.net/sujets-filiere-Sciences-experimentales.html; whether corrections are included was not confirmed); bac-feljib.com, touahria.com (physics only), dzdbac.com. The official ONEC site (bac.onec.dz / onec.dz) could not be reached and had no archive in search results.",
+    "Amazigh (optional) and pe were skipped as instructed. For reference, eddirasa and dzexams both list Amazigh on their hubs (dzexams mod=amazigh); this was not verified.",
+    "Copyright: only index pages are linked. No paper or solution content is copied."
+  ]
+}

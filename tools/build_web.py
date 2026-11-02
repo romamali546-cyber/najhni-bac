@@ -25,8 +25,16 @@ moods = ['happy', 'neutral', 'worried', 'sad']
 mas = {k: svg(S('src', 'mascot', f'{k}.svg')) for k in moods}
 ico = {k: svg(S('src', 'icons', f'icon_{k}.svg')).replace('id="bg"', f'id="bg-{k}"').replace('url(#bg)', f'url(#bg-{k})') for k in moods}
 
+ex = {}
+for f in ('exercises_math_physics.json', 'exercises_svt_philo.json'):
+    fp = S('src', 'data', f)
+    if os.path.exists(fp):
+        for k, v in json.load(open(fp)).items():
+            if isinstance(v, list): ex.setdefault(k, []).extend(v)
+lk = json.load(open(S('src', 'data', 'links.json'))) if os.path.exists(S('src', 'data', 'links.json')) else {}
+lk = {'sites': lk.get('sites', []), 'links': lk.get('links', {})}
 h = open(S('src', 'app.html')).read()
-for k, v in [('/*DATA*/', keep), ('/*MSG*/', msg), ('/*MASCOT*/', mas), ('/*ICONS*/', ico)]:
+for k, v in [('/*EX*/', ex), ('/*LINKS*/', lk), ('/*DATA*/', keep), ('/*MSG*/', msg), ('/*MASCOT*/', mas), ('/*ICONS*/', ico)]:
     h = h.replace(k, json.dumps(v, ensure_ascii=False).replace('</', '<\\/'))
 
 # Offline fonts instead of Google Fonts
