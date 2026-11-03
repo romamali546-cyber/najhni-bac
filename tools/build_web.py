@@ -10,7 +10,7 @@ keep = {'bac_date': {k: d['bac_date'].get(k) for k in ('estimated_start', 'offic
 for s in d['streams']:
     subs = []
     for x in s['subjects']:
-        y = {k: x[k] for k in ('id', 'name_ar', 'coefficient') if k in x}
+        y = {k: x[k] for k in ('id', 'name_ar', 'coefficient', 'duration_hours') if k in x}
         y['chapters'] = x.get('chapters', []); y['optional'] = x.get('optional', False)
         if x.get('chapters_by_option'): y['chapters_by_option'] = x['chapters_by_option']
         subs.append(y)

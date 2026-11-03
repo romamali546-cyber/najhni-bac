@@ -1,5 +1,11 @@
 package com.najahni.bac;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Base64;
+import androidx.core.content.FileProvider;
+import java.io.File;
+import java.io.FileOutputStream;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
@@ -37,6 +43,32 @@ public class FennoukIconPlugin extends Plugin {
         JSObject ret = new JSObject();
         ret.put("pending", mood);
         call.resolve(ret);
+    }
+
+    /** JS: FennoukIcon.shareImage({base64, text}) - shares a PNG through Android's share sheet. */
+    @PluginMethod
+    public void shareImage(PluginCall call) {
+        String b64 = call.getString("base64", "");
+        String text = call.getString("text", "");
+        try {
+            byte[] bytes = Base64.decode(b64, Base64.DEFAULT);
+            File file = new File(getContext().getCacheDir(), "najahni-bac-share.png");
+            try (FileOutputStream out = new FileOutputStream(file)) {
+                out.write(bytes);
+            }
+            Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider", file);
+            Intent send = new Intent(Intent.ACTION_SEND);
+            send.setType("image/png");
+            send.putExtra(Intent.EXTRA_STREAM, uri);
+            send.putExtra(Intent.EXTRA_TEXT, text);
+            send.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Intent chooser = Intent.createChooser(send, "شارك سلسلتك");
+            chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            getActivity().startActivity(chooser);
+            call.resolve();
+        } catch (Exception e) {
+            call.reject("share failed: " + e.getMessage());
+        }
     }
 
     @PluginMethod
