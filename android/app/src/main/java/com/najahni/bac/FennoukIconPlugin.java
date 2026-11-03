@@ -48,21 +48,30 @@ public class FennoukIconPlugin extends Plugin {
     /** JS: FennoukIcon.shareImage({base64, text}) - shares a PNG through Android's share sheet. */
     @PluginMethod
     public void shareImage(PluginCall call) {
-        String b64 = call.getString("base64", "");
-        String text = call.getString("text", "");
+        shareBytes(call, "najahni-bac-share.png", "image/png", "شارك سلسلتك");
+    }
+
+    /** JS: FennoukIcon.shareFile({base64, name, mime, text}) - e.g. the progress backup file. */
+    @PluginMethod
+    public void shareFile(PluginCall call) {
+        String name = call.getString("name", "najahni-bac-backup.json").replaceAll("[^A-Za-z0-9._-]", "_");
+        shareBytes(call, name, call.getString("mime", "application/json"), "احفظ نسختك الاحتياطية");
+    }
+
+    private void shareBytes(PluginCall call, String name, String mime, String title) {
         try {
-            byte[] bytes = Base64.decode(b64, Base64.DEFAULT);
-            File file = new File(getContext().getCacheDir(), "najahni-bac-share.png");
+            byte[] bytes = Base64.decode(call.getString("base64", ""), Base64.DEFAULT);
+            File file = new File(getContext().getCacheDir(), name);
             try (FileOutputStream out = new FileOutputStream(file)) {
                 out.write(bytes);
             }
             Uri uri = FileProvider.getUriForFile(getContext(), getContext().getPackageName() + ".fileprovider", file);
             Intent send = new Intent(Intent.ACTION_SEND);
-            send.setType("image/png");
+            send.setType(mime);
             send.putExtra(Intent.EXTRA_STREAM, uri);
-            send.putExtra(Intent.EXTRA_TEXT, text);
+            send.putExtra(Intent.EXTRA_TEXT, call.getString("text", ""));
             send.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Intent chooser = Intent.createChooser(send, "شارك سلسلتك");
+            Intent chooser = Intent.createChooser(send, title);
             chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             getActivity().startActivity(chooser);
             call.resolve();

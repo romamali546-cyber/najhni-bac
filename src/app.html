@@ -185,7 +185,9 @@ nav.tabs button[aria-current="page"]{color:var(--primary);font-weight:700}
 
 <script>
 const BAC=/*DATA*/;
-const MSG=/*MSG*/;
+const MSG_M=/*MSG*/,MSG_F=/*MSGF*/;
+const MSG=new Proxy({},{get:(t,k)=>((S&&S.gender==="f")?MSG_F:MSG_M)[k]});
+const gx=(m,f)=>(S&&S.gender==="f")?f:m;
 const MASCOT=/*MASCOT*/;
 const BUILD=Number("/*BUILD*/")||0;
 const EX=/*EX*/;
@@ -310,11 +312,11 @@ function vHome(){
   const doneN=ses.filter(x=>lg.done.includes(x.key)).length;
   const d=daysToBac();const weeks=Math.floor(d/7);
   const greet=t.getHours()<12?"صباح الخير":t.getHours()<18?"مرحباً":"مساء الخير";
-  return `${updCard()}
+  return `${updCard()}${announceCard()}
   <div class="row">${avatar()}<div class="grow"><div class="tiny">${greet}</div><h2>أهلاً ${esc(S.name)} 👋</h2></div>
     <button class="iconbtn" data-tab="about" aria-label="عن التطبيق والتواصل">${INFO_ICON}</button></div>
   <section class="hero mood-${md} pop"><div class="mascot">${MASCOT[md]}</div>
-    <div class="col" style="gap:6px"><h1>${md==="happy"?"فنّوك فرحان بيك!":md==="neutral"?"فنّوك مستنّيك":md==="worried"?"فنّوك قلقان شوية":"فنّوك ناعس بلا بيك"}</h1><p>${esc(heroMessage(md))}</p></div></section>
+    <div class="col" style="gap:6px"><h1>${md==="happy"?gx("فنّوك فرحان بيك!","فنّوك فرحان بيكِ!"):md==="neutral"?gx("فنّوك مستنّيك","فنّوك مستنّيكِ"):md==="worried"?"فنّوك قلقان شوية":gx("فنّوك ناعس بلا بيك","فنّوك ناعس بلا بيكِ")}</h1><p>${esc(heroMessage(md))}</p></div></section>
   ${cdCard()}
   <div class="stats">
     <div class="stat"><div class="k">${FLAME}أيام متتالية</div><div class="v">${streak()} <small>يوم</small></div></div>
@@ -413,6 +415,7 @@ function vSettings(){
   <button class="opt" data-tab="about"><span class="iconbtn" style="pointer-events:none">${INFO_ICON}</span><span class="grow"><b>عن التطبيق والمطوّر</b><span class="small muted">تواصل مع Oussama Hemache للدراسة عن بعد</span></span><span class="muted">‹</span></button>
   <section class="card col">
     <div class="row">${avatar()}<div class="grow"><b>${esc(S.name)}</b><div class="tiny">${esc(st.name_ar)}${S.option?" · "+esc(S.option):""}</div></div></div>
+    <div class="choice" style="grid-template-columns:1fr 1fr" role="group" aria-label="أنت"><button class="opt" data-sgender="m" aria-pressed="${(S.gender||"m")==="m"}" style="justify-content:center"><b>تلميذ</b></button><button class="opt" data-sgender="f" aria-pressed="${S.gender==="f"}" style="justify-content:center"><b>تلميذة</b></button></div>
     <div class="field"><label for="s-name">الاسم</label><input id="s-name" type="text" value="${esc(S.name)}" maxlength="30"></div>
     <div class="row"><label class="btn soft" for="s-photo" style="display:inline-flex;align-items:center">${S.photo?"تغيير الصورة":"إضافة صورة"}</label><input id="s-photo" type="file" accept="image/*" hidden>${S.photo?'<button class="btn ghost" id="s-nophoto">حذف الصورة</button>':""}</div>
   </section>
@@ -428,12 +431,15 @@ function vSettings(){
   </section>
   <section class="card col"><h3>تاريخ البكالوريا</h3>
     <div class="field"><label for="s-bac">أول يوم في الامتحان</label><input id="s-bac" type="date" value="${S.bacDate}"></div>
-    <p class="tiny">${esc(BAC.bac_date.note||"")}</p>
+    <p class="tiny">${S.bacOfficial?"✓ تاريخ رسمي":esc((CFG&&CFG.note)||BAC.bac_date.note||"")}</p>
+    ${S.bacDateManual?`<button class="btn ghost" id="s-bacauto">استعمل التاريخ الرسمي تلقائياً</button>`:`<p class="tiny">يتحدّث التاريخ تلقائياً عند إعلانه رسمياً.</p>`}
   </section>
   <section class="card col"><h3>أيقونة التطبيق تتغير حسب مراجعتك</h3>
     <div class="row" style="justify-content:space-between">${["happy","neutral","worried","sad"].map(k=>`<div class="col" style="align-items:center;gap:4px"><div class="iconprev">${ICONS[k]}</div><span class="tiny">${{happy:"راجعت",neutral:"اليوم",worried:"تأخرت",sad:"غبت أياماً"}[k]}</span></div>`).join("")}</div>
   </section>
   <section class="card col"><h3>البيانات</h3><p class="tiny">نجّحني باك · رفيقك فنّوك</p><p class="tiny">كل بياناتك محفوظة على هاتفك فقط، والتطبيق يعمل بدون إنترنت.</p>
+    <div class="row" style="flex-wrap:wrap"><button class="btn soft grow" id="s-backup">💾 حفظ نسخة احتياطية</button><label class="btn ghost grow" for="s-restore" style="text-align:center">♻️ استرجاع نسخة</label><input id="s-restore" type="file" accept="application/json,.json,text/plain" hidden></div>
+    <p class="tiny">احفظ الملف في Google Drive أو أرسله لنفسك في واتساب، حتى تسترجع تقدّمك إن غيّرت هاتفك.</p>
     ${ui.confirmReset?`<p class="small">متأكد؟ سيُحذف كل تقدمك.</p><div class="row"><button class="btn" style="background:var(--danger);color:#fff" id="s-reset2">نعم، احذف</button><button class="btn ghost" id="s-cancel">إلغاء</button></div>`:`<button class="btn ghost" id="s-reset">البدء من جديد</button>`}
   </section>`;
 }
@@ -484,7 +490,22 @@ function bindExternal(root){root.querySelectorAll('a[target="_blank"],a[href^="t
 const UPD_API="https://api.github.com/repos/romamali546-cyber/najhni-bac/releases/latest";
 const UPD_APK="https://github.com/romamali546-cyber/najhni-bac/releases/download/latest/najahni-bac.apk";
 let UPD=null;try{UPD=JSON.parse(localStorage.getItem("fennouk-upd")||"null")}catch(e){}
+const CFG_URL="https://raw.githubusercontent.com/romamali546-cyber/najhni-bac/main/config.json";
+let CFG=null;try{CFG=JSON.parse(localStorage.getItem("fennouk-cfg")||"null")}catch(e){}
+async function checkConfig(){
+  try{const r=await fetch(CFG_URL+"?t="+Math.floor(Date.now()/3600e3),{cache:"no-store"});if(!r.ok)return;const c=await r.json();CFG=c;
+    try{localStorage.setItem("fennouk-cfg",JSON.stringify(c))}catch(e){}
+    if(S&&!S.bacDateManual&&/^\d{4}-\d{2}-\d{2}$/.test(c.bac_date||"")){const wasOfficial=S.bacOfficial;
+      if(S.bacDate!==c.bac_date||!!S.bacOfficial!==!!c.official){S.bacDate=c.bac_date;S.bacOfficial=!!c.official;save();
+        if(c.official&&!wasOfficial){toast("📢 أُعلن تاريخ الباك رسمياً: "+fmtDate(parseYmd(c.bac_date)));
+          try{if(LN){const p=await LN.checkPermissions();if(p.display==="granted")await LN.schedule({notifications:[{id:3999,title:"📢 تاريخ الباك رسمي الآن",body:"الباك يبدأ "+fmtDate(parseYmd(c.bac_date))+". العدّاد محدّث، يلا نكمّلو!",channelId:"reminders",smallIcon:"ic_stat_fennouk",schedule:{at:new Date(Date.now()+2000)}}]})}}catch(e){}}
+        nativeSync(true)}}
+    render()}catch(e){}
+}
+function announceCard(){const m=CFG&&CFG.message;if(!m||ui.hideMsg===m)return "";
+  return `<section class="card col upd"><div class="row"><span style="font-size:22px" aria-hidden="true">📢</span><p class="grow small">${esc(m)}</p><button class="iconbtn sm" id="msg-x" aria-label="إخفاء">✕</button></div></section>`}
 async function checkUpdate(manual){
+  checkConfig();
   if(!NATIVE&&!manual)return;
   try{const last=+localStorage.getItem("fennouk-upd-at")||0;if(!manual&&Date.now()-last<6*3600e3)return}catch(e){}
   try{
@@ -602,6 +623,19 @@ function openBooking(){const subs=studySubjects();const lvT=v=>({1:"ضعيف",2:
     ov.querySelector("#b-send").href=`https://wa.me/${TUTOR.wa}?text=${encodeURIComponent(msg)}`};
   ov.querySelectorAll("select,input").forEach(e=>e.oninput=e.onchange=upd);upd();bindExternal(ov)}
 
+/* ---------- backup & restore ---------- */
+function b64utf8(str){return btoa(unescape(encodeURIComponent(str)))}
+async function doBackup(){const data=JSON.stringify({app:"najahni-bac",v:1,saved:new Date().toISOString(),state:S});const name="najahni-bac-backup-"+ymd(today())+".json";
+  try{if(FI&&FI.shareFile){await FI.shareFile({base64:b64utf8(data),name,mime:"application/json",text:"نسخة احتياطية من تقدّمي في نجّحني باك"});return}
+    const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type:"application/json"}));a.download=name;a.click();toast("حُفظت النسخة الاحتياطية")}catch(e){toast("تعذّر حفظ النسخة")}}
+function readBackup(file,cb){if(!file)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result);if(j.app!=="najahni-bac"||!j.state||!j.state.stream)throw 0;cb(j)}catch(e){toast("هذا الملف ليس نسخة احتياطية من نجّحني باك")}};r.readAsText(file)}
+function showRestore(){const j=ui.pendingRestore;if(!j)return;const st=j.state;const days=Object.keys(st.log||{}).filter(k=>(st.log[k].done||[]).length).length;
+  const ov=sheet(`${sheetHead("♻️","استرجاع نسخة احتياطية","محفوظة يوم "+esc((j.saved||"").slice(0,10)))}
+   <div class="note">${esc(st.name)} · ${days} يوم مراجعة · ${Object.keys(st.exDone||{}).length} تمرين محلول</div>
+   <p class="small">سيُستبدل تقدّمك الحالي على هذا الهاتف بما في هذه النسخة.</p>
+   <button class="btn block" id="r-ok">استرجاع</button><button class="btn ghost" data-close>إلغاء</button>`);
+  ov.querySelector("#r-ok").onclick=()=>{S=st;ui.pendingRestore=null;save();ov.remove();ui.tab="home";render();nativeSync(true);toast("مرحباً بعودتك يا "+S.name+"! تقدّمك رجع كما كان")}}
+
 /* ---------- about & contact ---------- */
 const INFO_ICON='<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg>';
 const TUTOR={name:"Oussama Hemache",latin:"مطوّر التطبيق · أستاذ للدراسة عن بعد",phone:"+213772083471",phoneShow:"+213 772 08 34 71",wa:"213772083471",email:"oussamahamache1@gmail.com"};
@@ -636,8 +670,8 @@ function renderOnb(){
   const steps=`<div class="steps">${Array.from({length:N},(_,i)=>`<i class="${i<=st?"on":""}"></i>`).join("")}</div>`;
   const back=st>0?`<button class="btn ghost" id="o-back">رجوع</button>`:"";
   let body="";
-  if(st===0)body=`<div class="mascot pop">${MASCOT.happy}</div><p class="tiny" style="text-align:center;font-weight:700;letter-spacing:.02em;color:var(--primary)">نجّحني باك</p><h1 style="text-align:center">مرحباً! أنا فنّوك 🦊</h1><p class="muted" style="text-align:center">رفيقك في مراجعة البكالوريا. أصنع لك برنامجاً حسب شعبتك، أذكّرك كل يوم، وأفرح كلما راجعت. مستقبلك بين يديك، وأنا معاك حتى يوم الباك.</p><button class="btn block" id="o-next">يلا نبداو</button>`;
-  if(st===1)body=`<h1>واش اسمك؟</h1><div class="field"><label for="o-name">الاسم</label><input id="o-name" type="text" maxlength="30" placeholder="مثلاً: أمين" value="${esc(d.name||"")}"></div>
+  if(st===0)body=`<div class="mascot pop">${MASCOT.happy}</div><p class="tiny" style="text-align:center;font-weight:700;letter-spacing:.02em;color:var(--primary)">نجّحني باك</p><h1 style="text-align:center">مرحباً! أنا فنّوك 🦊</h1><p class="muted" style="text-align:center">رفيقك في مراجعة البكالوريا. أصنع لك برنامجاً حسب شعبتك، أذكّرك كل يوم، وأفرح كلما راجعت. مستقبلك بين يديك، وأنا معاك حتى يوم الباك.</p><button class="btn block" id="o-next">يلا نبداو</button><label class="btn ghost block" for="o-restore" style="text-align:center">عندي نسخة احتياطية</label><input id="o-restore" type="file" accept="application/json,.json,text/plain" hidden>`;
+  if(st===1)body=`<h1>واش اسمك؟</h1><div class="choice" style="grid-template-columns:1fr 1fr" role="group" aria-label="أنت"><button class="opt" data-gender="m" aria-pressed="${d.gender==="m"}" style="justify-content:center"><b>تلميذ</b></button><button class="opt" data-gender="f" aria-pressed="${d.gender==="f"}" style="justify-content:center"><b>تلميذة</b></button></div><div class="field"><label for="o-name">الاسم</label><input id="o-name" type="text" maxlength="30" placeholder="مثلاً: أمين" value="${esc(d.name||"")}"></div>
     <div class="row"><label class="photo" for="o-photo">${d.photo?`<img src="${d.photo}" alt="">`:"صورتك<br>(اختياري)"}</label><input id="o-photo" type="file" accept="image/*" hidden><p class="muted small grow">أضف صورتك إن أردت، فنّوك يرحب بك بها كل مرة.</p></div>
     <div class="row">${back}<button class="btn grow" id="o-next" ${d.name&&d.name.trim()?"":"disabled"}>التالي</button></div>`;
   if(st===2){const s=BAC.streams.find(x=>x.id===d.stream);
@@ -663,6 +697,8 @@ function bindOnb(){
   const d=ui.draft;const on=(id,ev,f)=>{const e=document.getElementById(id);if(e)e.addEventListener(ev,f)};
   on("o-next","click",()=>{if(ui.onbStep===2){const s=BAC.streams.find(x=>x.id===d.stream);if(s.options&&s.options.length&&!d.option)d.option=s.options[0];}ui.onbStep++;renderOnb()});
   on("o-back","click",()=>{ui.onbStep--;renderOnb()});
+  document.querySelectorAll("[data-gender]").forEach(b=>b.onclick=()=>{d.gender=b.dataset.gender;const nm=document.getElementById("o-name");if(nm)d.name=nm.value;renderOnb()});
+  on("o-restore","change",e=>readBackup(e.target.files[0],j=>{ui.pendingRestore=j;showRestore()}));
   on("o-name","input",e=>{d.name=e.target.value;$("#o-next").disabled=!d.name.trim()});
   on("o-photo","change",e=>readPhoto(e.target.files[0],u=>{d.photo=u;renderOnb()}));
   on("o-opt","change",e=>d.option=e.target.value);
@@ -671,7 +707,7 @@ function bindOnb(){
   document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{d.mode=b.dataset.mode;renderOnb()});
   document.querySelectorAll("[data-olv]").forEach(b=>b.onclick=()=>{const[i,v]=b.dataset.olv.split(":");d.levels[i]=+v;renderOnb()});
   on("o-done","click",()=>{
-    S={name:d.name.trim(),photo:d.photo||null,stream:d.stream,option:d.option||null,mode:d.mode,levels:d.levels,remind:d.remind||"18:00",
+    S={gender:d.gender||"m",name:d.name.trim(),photo:d.photo||null,stream:d.stream,option:d.option||null,mode:d.mode,levels:d.levels,remind:d.remind||"18:00",
       bacDate:BAC.bac_date.estimated_start,bacOfficial:!!BAC.bac_date.official,start:ymd(today()),chapDone:{},log:{}};
     save();ui.tab="home";render();toast("أهلاً "+S.name+"! برنامجك واجد 🎉");if(LN)askNotif();
   });
@@ -694,6 +730,7 @@ function bind(){
   document.querySelectorAll("[data-open-sub]").forEach(b=>b.onclick=()=>{const id=b.dataset.openSub;ui.openSub=ui.openSub||{};ui.openSub[id]=true;render();const d=document.querySelector(`details[data-sub="${id}"]`);if(d)d.scrollIntoView({block:"start",behavior:"smooth"})});
   bindExternal(document);
   document.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>({calc:openCalc,mock:openMock,share:openShare,book:openBooking})[b.dataset.tool]());
+  {const mx=document.getElementById("msg-x");if(mx)mx.onclick=()=>{ui.hideMsg=CFG.message;render()}}
   {const x=document.getElementById("upd-x");if(x)x.onclick=()=>{ui.hideUpd=true;render()};const c=document.getElementById("upd-check");if(c)c.onclick=()=>{c.disabled=true;c.textContent="جارٍ البحث…";checkUpdate(true)}}
   document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;save();render();toast("تم التبديل إلى "+MODES[S.mode].name)});
   const on=(id,ev,f)=>{const e=document.getElementById(id);if(e)e.addEventListener(ev,f)};
@@ -703,9 +740,13 @@ function bind(){
   on("s-stream","change",e=>{S.stream=e.target.value;const s=stream();S.option=s.options&&s.options.length?s.options[0]:null;S.levels={};S.chapDone={};save();render();toast("تم تغيير الشعبة وتحديث البرنامج")});
   on("s-opt","change",e=>{S.option=e.target.value;save();render()});
   on("s-rem","change",e=>{S.remind=e.target.value;save();render();toast("التذكير على "+S.remind)});
-  on("s-bac","change",e=>{if(e.target.value){S.bacDate=e.target.value;save();render()}});
+  on("s-bac","change",e=>{if(e.target.value){S.bacDate=e.target.value;S.bacDateManual=true;save();render()}});
+  on("s-bacauto","click",()=>{S.bacDateManual=false;save();checkConfig();toast("سيُستعمل التاريخ الذي ننشره تلقائياً")});
   on("s-notif","click",askNotif);
   on("s-reset","click",()=>{ui.confirmReset=true;render()});
+  on("s-backup","click",doBackup);
+  document.querySelectorAll("[data-sgender]").forEach(b=>b.onclick=()=>{S.gender=b.dataset.sgender;save();render();nativeSync(true)});
+  on("s-restore","change",e=>readBackup(e.target.files[0],st=>{ui.pendingRestore=st;render();showRestore()}));
   on("s-cancel","click",()=>{ui.confirmReset=false;render()});
   on("s-reset2","click",()=>{try{localStorage.removeItem(KEY)}catch(e){}S=null;ui={tab:"home",onbStep:0,draft:{mode:"strong",remind:"18:00",levels:{}}};render()});
 }
@@ -746,7 +787,7 @@ let lastSyncKey="";
 async function nativeSync(force){
   if(!NATIVE||!S)return;
   const md=mood();const ls=lastStudy();
-  const key=[md,ls?ymd(ls):"",S.remind,ymd(today()),S.name,S.bacDate,S.mode].join("|");
+  const key=[md,ls?ymd(ls):"",S.remind,ymd(today()),S.name,S.bacDate,S.mode,S.gender].join("|");
   if(!force&&key===lastSyncKey)return;lastSyncKey=key;
   try{if(FI)await FI.sync({mood:md,lastStudy:ls?ymd(ls):"",start:S.start,remind:S.remind})}catch(e){}
   try{if(LN)await scheduleReminders()}catch(e){}
