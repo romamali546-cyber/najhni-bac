@@ -11,6 +11,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      BUILD_NUMBER: ${{ github.run_number }}
     steps:
       - uses: actions/checkout@v4
 
@@ -43,14 +45,22 @@ jobs:
           name: najahni-bac-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Rename APK
-        run: cp android/app/build/outputs/apk/debug/app-debug.apk najahni-bac.apk
+      - name: Rename APK and write release notes
+        run: |
+          cp android/app/build/outputs/apk/debug/app-debug.apk najahni-bac.apk
+          {
+            echo "build=${BUILD_NUMBER}"
+            echo
+            git log -1 --pretty=%B | grep -v -E '^(Co-Authored-By|Claude-Session):' | sed '/^$/d'
+            echo
+            echo "حمّل ملف najahni-bac.apk وثبّته فوق النسخة القديمة، يبقى تقدّمك كما هو."
+          } > release_body.md
 
       - name: Publish APK as the latest release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
-          name: نجّحني باك (آخر نسخة)
-          body: "حمّل ملف najahni-bac.apk وثبّته على هاتفك. تُحدَّث هذه النسخة تلقائياً مع كل تعديل."
+          name: نجّحني باك 1.0.${{ github.run_number }}
+          body_path: release_body.md
           files: najahni-bac.apk
           make_latest: true
