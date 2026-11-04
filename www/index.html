@@ -37,7 +37,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--primary);outline-offset:2px}
-.app{max-width:520px;margin:0 auto;padding-block:16px 96px;display:flex;flex-direction:column;gap:14px}
+.app{max-width:520px;margin:0 auto;padding-block:16px calc(120px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
 h1,h2,h3{margin:0;line-height:1.3;text-wrap:balance}
 h1{font-size:24px;font-weight:700}h2{font-size:19px;font-weight:700}h3{font-size:16px;font-weight:600}
 p{margin:0}
@@ -879,7 +879,8 @@ function playGame(set,kind){const T=kind==="terms";const pool=T?(set==="all"?[..
 
 /* ---------- theme: auto (follows the phone) / light / dark ---------- */
 function applyTheme(){const t=S&&S.theme;const r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");
-  const dark=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);let m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dark?"#090F0E":"#0A7458"}
+  const dark=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);let m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dark?"#090F0E":"#0A7458";
+  if(window.__barsDark!==dark){try{if(FI&&FI.systemBars){FI.systemBars({dark});window.__barsDark=dark}}catch(e){}}}
 try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(!S||!S.theme||S.theme==="auto")applyTheme()})}catch(e){}
 
 /* ---------- daily splash ---------- */
@@ -949,9 +950,8 @@ function celebrate(subject,min){const st=streak();const ses=sessionsFor(today())
 document.addEventListener("click",e=>{const b=e.target.closest("button,.btn,.opt,.tool,.gamecard");if(b&&!b.disabled)buzz(8)},true);
 
 /* ---------- Android back button / back gesture ----------
-   Capacitor sends "back" to the WebView history, so we keep one trap entry in it and handle each press ourselves. */
-let backArmed=false,exitPending=false;
-function armBack(){if(!NATIVE||backArmed)return;try{history.pushState({trap:1},"");backArmed=true}catch(e){}}
+   MainActivity asks window.__fennoukBack() first, so the button closes screens before leaving the app. */
+let exitPending=false;
 function handleBack(){
   const sp=document.querySelector(".splash");if(sp){sp.remove();return true}
   const ce=document.querySelector(".celebrate");if(ce){ce.remove();render();return true}
@@ -964,10 +964,9 @@ function handleBack(){
     return true}
   if(ui.tab!=="home"){ui.tab=ui.tab==="about"?(ui.back||"home"):"home";ui.confirmReset=false;render();window.scrollTo(0,0);return true}
   return false}
-window.addEventListener("popstate",()=>{if(!NATIVE)return;backArmed=false;
-  if(handleBack()){armBack();return}
-  if(!exitPending){exitPending=true;toast("اضغط رجوع مرة أخرى للخروج");setTimeout(()=>{exitPending=false;armBack()},2000)}});
-setTimeout(armBack,300);
+/* called by MainActivity on every back press: true = handled here, false = let Android close the app */
+window.__fennoukBack=()=>{try{if(handleBack())return true}catch(e){}
+  if(exitPending)return false;exitPending=true;toast("اضغط رجوع مرة أخرى للخروج");setTimeout(()=>{exitPending=false},2000);return true};
 
 /* ---------- backup & restore ---------- */
 function b64utf8(str){return btoa(unescape(encodeURIComponent(str)))}
@@ -1173,5 +1172,6 @@ setInterval(()=>{if(!S)return;const t=today();const now=pad(t.getHours())+":"+pa
   if(ui.tab==="home"&&!document.querySelector(".overlay"))render();},60000);
 
 render();
+setTimeout(()=>{try{applyTheme()}catch(e){}},400);
 </script>
 </body></html>

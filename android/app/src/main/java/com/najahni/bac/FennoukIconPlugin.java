@@ -80,6 +80,14 @@ public class FennoukIconPlugin extends Plugin {
         }
     }
 
+    /** JS: FennoukIcon.systemBars({dark}) - matches the status/navigation bars to the app theme. */
+    @PluginMethod
+    public void systemBars(PluginCall call) {
+        boolean dark = Boolean.TRUE.equals(call.getBoolean("dark", false));
+        if (getActivity() instanceof MainActivity) ((MainActivity) getActivity()).setSystemBars(dark);
+        call.resolve();
+    }
+
     @PluginMethod
     public void current(PluginCall call) {
         JSObject ret = new JSObject();
