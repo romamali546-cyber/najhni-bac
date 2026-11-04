@@ -141,6 +141,9 @@ nav.tabs button[aria-current="page"]{color:var(--primary);font-weight:700}
 .paperlink span{color:var(--primary)}
 .extext{display:flex;flex-direction:column;gap:8px;font-size:15px;line-height:1.85;overflow-wrap:anywhere}
 .extext.sol{background:var(--surface2);border-radius:14px;padding:12px}
+.gamecard.terms{background:linear-gradient(135deg,#0B5E57,#13806F)}
+.gm-q.long div{font-size:15px;font-weight:600}.gm-opts.long .gm-opt{font-size:13.5px;font-weight:500;text-align:start;justify-content:flex-start;line-height:1.6}
+.gm-rev.t{grid-template-columns:1fr}.gl{display:flex;flex-direction:column;max-height:55vh;overflow:auto}.gl-u{font-weight:700;color:var(--primary);padding:10px 0 4px}.gl-it{border-top:1px solid var(--border);padding:8px 0}.gl-it summary{font-weight:600;cursor:pointer}.gl-it p{margin-top:6px;font-size:14px;color:var(--text2);line-height:1.8}
 .gamecard{display:flex;align-items:center;gap:12px;text-align:start;border:0;border-radius:var(--r);padding:14px 16px;background:linear-gradient(135deg,#2B2A6B,#4B3A8F);color:#fff}
 .gamecard small{display:block;color:rgba(255,255,255,.8);font-size:12.5px}.gamecard b{font-size:16px}
 .gc-ic{font-size:30px}.gc-go{background:#F0A85A;color:#2B1A08;font-weight:700;border-radius:999px;padding:6px 14px;font-size:13px}
@@ -229,6 +232,7 @@ const MASCOT=/*MASCOT*/;
 const BUILD=Number("/*BUILD*/")||0;
 const EX=/*EX*/;
 const HD=/*HD*/;
+const TERMS=/*TERMS*/;
 const LINKS=/*LINKS*/;
 const ICONS=/*ICONS*/;
 const SUBJ_COLORS={math:"#3A6FD8",physics:"#7A4FD6",svt:"#1E9E5A",arabic:"#0E8A6A",islamic:"#2C8C7C",philosophy:"#C2508A",history_geo:"#B7791F",french:"#2F7DB8",english:"#D2603A",amazigh:"#E2A72E",technology:"#5B6B95",economics:"#8C6A3F",accounting:"#A0743A",law:"#6D5B8E",third_language:"#4E9A9F",pe:"#9AA0AE",arts:"#D96C9A"};
@@ -361,6 +365,7 @@ function vHome(){
     <div class="stat"><div class="k">هدف اليوم</div><div class="v">${doneN}<small> / ${ses.length} جلسات</small></div><div class="progress"><i style="width:${ses.length?doneN/ses.length*100:0}%"></i></div></div>
   </div>
   <button class="gamecard" data-tool="game"><span class="gc-ic" aria-hidden="true">🎮</span><span class="grow"><b>سباق التواريخ</b><small>${(S.game&&S.game.best)?"أفضل نتيجة: "+S.game.best+" نقطة · ":""}احفظ تواريخ الباك وأنت تلعب</small></span><span class="gc-go">العب</span></button>
+  <button class="gamecard terms" data-tool="terms"><span class="gc-ic" aria-hidden="true">🧠</span><span class="grow"><b>لعبة المصطلحات</b><small>${(S.game&&S.game.tbest)?"أفضل نتيجة: "+S.game.tbest+" نقطة · ":""}مصطلحات التاريخ والجغرافيا</small></span><span class="gc-go">العب</span></button>
   <section class="tools" aria-label="أدوات">
     <button class="tool" data-tool="calc"><span aria-hidden="true">🧮</span><b>حاسبة المعدل</b><small>${S.grades&&S.grades[S.stream]&&Object.keys(S.grades[S.stream]).length?"معدلك المتوقع "+fmtAvg(calcAvg().avg):"احسب معدلك المتوقع"}</small></button>
     <button class="tool" data-tool="mock"><span aria-hidden="true">⏱️</span><b>باك تجريبي</b><small>بالتوقيت الرسمي</small></button>
@@ -683,17 +688,48 @@ function makeQ(pool,used,i){
   if(Math.random()<.6){const opts=shuf([hdFmt(e.d),...nearDates(e,pool)]);return {type:"when",ev:e,q:e.e,opts,answer:hdFmt(e.d)}}
   const dis=shuf(pool.filter(x=>x.id!==e.id&&hdFmt(x.d)!==hdFmt(e.d))).sort((a,b)=>Math.abs(hdYear(a.d)-hdYear(e.d))-Math.abs(hdYear(b.d)-hdYear(e.d))).slice(0,3);
   return {type:"what",ev:e,q:hdFmt(e.d),opts:shuf([e.e,...dis.map(x=>x.e)]),answer:e.e}}
-function openGame(){const g=gstate();const nDz=HD.filter(x=>x.u==="dz").length,nW=HD.length-nDz;
-  const mastered=HD.filter(x=>(g.right[x.id]||0)>=3&&!(g.wrong[x.id]>g.right[x.id])).length;
+const HD_ALIF_FREE=["sciences","foreign_languages"];
+function myHD(){return HD.filter(x=>!(x.a&&HD_ALIF_FREE.includes(S.stream)))}
+function makeTermQ(pool,used,i){const e=pickEvent(pool,used);used.add(e.id);
+  const same=shuf(pool.filter(x=>x.id!==e.id&&x.u===e.u)),other=shuf(pool.filter(x=>x.id!==e.id&&x.u!==e.u));const dis=[...same,...other].slice(0,3);
+  if(Math.random()<.5)return {type:"term",ev:e,q:e.t,opts:shuf([e.def,...dis.map(x=>x.def)]),answer:e.def};
+  return {type:"def",ev:e,q:e.def,opts:shuf([e.t,...dis.map(x=>x.t)]),answer:e.t}}
+function openTerms(){const g=gstate();const H=(TERMS.history||[]),G=(TERMS.geography||[]);
+  if(!H.length&&!G.length){toast("المصطلحات قادمة قريباً");return}
+  const m=l=>l.filter(x=>(g.right[x.id]||0)>=3&&!(g.wrong[x.id]>g.right[x.id])).length;
+  const ov=sheet(`${sheetHead("🧠","لعبة المصطلحات","اعرف معنى كل مصطلح قبل يوم الباك")}
+   <div class="gm-mascot">${MASCOT.happy}</div>
+   <div class="stats"><div class="stat"><div class="k">أفضل نتيجة</div><div class="v">${g.tbest||0}</div></div><div class="stat"><div class="k">مصطلحات أتقنتها</div><div class="v">${m(H)+m(G)}<small> / ${H.length+G.length}</small></div></div></div>
+   <div class="choice">
+    <button class="opt" data-tset="history"><span style="font-size:24px">📜</span><span class="grow"><b>مصطلحات التاريخ</b><span class="small muted">${H.length} مصطلحاً</span></span></button>
+    <button class="opt" data-tset="geography"><span style="font-size:24px">🗺️</span><span class="grow"><b>مصطلحات الجغرافيا</b><span class="small muted">${G.length} مصطلحاً</span></span></button>
+    <button class="opt" data-tset="all"><span style="font-size:24px">⚡</span><span class="grow"><b>التاريخ والجغرافيا معاً</b><span class="small muted">${H.length+G.length} مصطلحاً</span></span></button>
+   </div>
+   <button class="btn soft" id="t-list">📖 قائمة المصطلحات للمراجعة</button>
+   <button class="btn ghost" data-close>إغلاق</button>`);
+  ov.querySelectorAll("[data-tset]").forEach(b=>b.onclick=()=>{ov.remove();const k=b.dataset.tset;playGame(k,"terms")});
+  ov.querySelector("#t-list").onclick=()=>{ov.remove();openGlossary()}}
+function openGlossary(){let tab="history";const units=TERMS.units||{};
+  const ov=sheet(`${sheetHead("📖","قائمة المصطلحات","اضغط على المصطلح لترى معناه")}<div class="lv"><button data-gt="history" aria-pressed="true">التاريخ</button><button data-gt="geography" aria-pressed="false">الجغرافيا</button></div>
+   <input type="text" id="gl-q" placeholder="ابحث عن مصطلح…"><div id="gl-list" class="gl"></div><button class="btn ghost" data-close>إغلاق</button>`);
+  const draw=()=>{const q=ov.querySelector("#gl-q").value.trim();const list=(TERMS[tab]||[]).filter(x=>!q||x.t.includes(q)||x.def.includes(q));let last=null;
+    ov.querySelector("#gl-list").innerHTML=list.map(x=>{const head=x.u!==last?`<div class="tiny gl-u">${esc((tab==="history"?(units.history||{})[x.u]:x.u)||x.u)}</div>`:"";last=x.u;
+      return head+`<details class="gl-it"><summary>${esc(x.t)}</summary><p>${esc(x.def)}</p></details>`}).join("")||`<p class="small muted">لا نتائج</p>`};
+  ov.querySelectorAll("[data-gt]").forEach(b=>b.onclick=()=>{tab=b.dataset.gt;ov.querySelectorAll("[data-gt]").forEach(x=>x.setAttribute("aria-pressed",x===b));draw()});
+  ov.querySelector("#gl-q").oninput=draw;draw()}
+function openGame(){const g=gstate();const ALL=myHD();const n=u=>ALL.filter(x=>x.u===u).length;
+  const mastered=ALL.filter(x=>(g.right[x.id]||0)>=3&&!(g.wrong[x.id]>g.right[x.id])).length;
   const ov=sheet(`${sheetHead("🎮","سباق التواريخ","أجب بسرعة قبل أن ينتهي الوقت. لديك 3 قلوب")}
    <div class="gm-mascot">${MASCOT.happy}</div>
    <div class="gm-rank"><div class="row"><b class="grow">🎖️ رتبتك: ${rankOf(g.xp||0).name}</b><span class="tiny">${g.xp||0} XP</span></div></div>
-   <div class="stats"><div class="stat"><div class="k">أفضل نتيجة</div><div class="v">${g.best||0}</div></div><div class="stat"><div class="k">تواريخ أتقنتها</div><div class="v">${mastered}<small> / ${HD.length}</small></div></div></div>
+   <div class="stats"><div class="stat"><div class="k">أفضل نتيجة</div><div class="v">${g.best||0}</div></div><div class="stat"><div class="k">تواريخ أتقنتها</div><div class="v">${mastered}<small> / ${ALL.length}</small></div></div></div>
    <div class="small" style="font-weight:600">اختر الجولة</div>
    <div class="choice">
-    <button class="opt" data-gset="all"><span style="font-size:24px">🌍</span><span class="grow"><b>كل التواريخ</b><span class="small muted">${HD.length} حدثاً من الجزائر والعالم</span></span></button>
-    <button class="opt" data-gset="dz"><span style="font-size:24px">🇩🇿</span><span class="grow"><b>الثورة الجزائرية</b><span class="small muted">${nDz} حدثاً من 1945 إلى 1971</span></span></button>
-    <button class="opt" data-gset="w"><span style="font-size:24px">🧭</span><span class="grow"><b>الحرب الباردة والعالم</b><span class="small muted">${nW} حدثاً من 1945 إلى 1991</span></span></button>
+    <button class="opt" data-gset="all"><span style="font-size:24px">🌍</span><span class="grow"><b>كل التواريخ</b><span class="small muted">${ALL.length} تاريخاً من البرنامج كاملاً</span></span></button>
+    <button class="opt" data-gset="u1"><span style="font-size:24px">🧭</span><span class="grow"><b>الوحدة 1: الثنائية والأحادية القطبية</b><span class="small muted">${n("u1")} تاريخاً · من 1941 إلى 1991</span></span></button>
+    <button class="opt" data-gset="u2"><span style="font-size:24px">🇩🇿</span><span class="grow"><b>الوحدة 2: الجزائر</b><span class="small muted">${n("u2")} تاريخاً · من 1943 إلى 1989</span></span></button>
+    <button class="opt" data-gset="u3"><span style="font-size:24px">🌍</span><span class="grow"><b>الوحدة 3: العالم الثالث وفلسطين</b><span class="small muted">${n("u3")} تاريخاً · من 1897 إلى 1993</span></span></button>
+    ${HD_ALIF_FREE.includes(S.stream)?`<p class="tiny">التواريخ المعلّمة بالحرف (أ) غير مقررة على شعبتك، فلم ندخلها.</p>`:""}
    </div>
    <p class="tiny">أجب بسرعة لتربح نقاطاً أكثر، واجمع سلسلة إجابات صحيحة لتضاعفها. سؤال الترتيب نقاطه مضاعفة. التواريخ التي تخطئ فيها تعود إليك حتى تحفظها.</p>
    <button class="btn ghost" data-close>إغلاق</button>`);
@@ -722,7 +758,7 @@ function confetti(host,n=70){const c=document.createElement("canvas");c.classNam
 const RANKS=[[0,"مبتدئ"],[150,"تلميذ مجتهد"],[400,"مؤرخ صغير"],[800,"حافظ التواريخ"],[1500,"خبير الباك"],[2500,"أسطورة التاريخ"]];
 function rankOf(xp){let r=RANKS[0],nx=null;for(let k=0;k<RANKS.length;k++){if(xp>=RANKS[k][0]){r=RANKS[k];nx=RANKS[k+1]||null}}return {name:r[1],from:r[0],next:nx}}
 
-function playGame(set){const pool=HD.filter(x=>set==="all"||x.u===set);const g=gstate();const ROUND=10,TIME=15;
+function playGame(set,kind){const T=kind==="terms";const pool=T?(set==="all"?[...(TERMS.history||[]),...(TERMS.geography||[])]:(TERMS[set]||[])):myHD().filter(x=>set==="all"||x.u===set);const g=gstate();const ROUND=10,TIME=15;
   let i=0,score=0,lives=3,combo=0,bestCombo=0,correct=0,q=null,tEnd=0,iv=null,locked=true,orderPick=[],lastTick=0;const used=new Set(),missed=[];
   const ov=sheet(`<div class="game"><div class="gm-top"><button class="iconbtn sm" id="gm-mute" aria-label="الصوت">${g.mute?"🔇":"🔊"}</button><span id="gm-lives" class="gm-lives"></span><span class="grow" style="text-align:center" id="gm-step"></span><span id="gm-score" class="gm-score">0</span></div>
     <div class="gm-timer"><i id="gm-time"></i></div><div class="gm-stage"><div class="gm-face" id="gm-face">${MASCOT.happy}</div><div class="gm-combo" id="gm-combo"></div></div><div id="gm-body"></div><button class="btn ghost" id="gm-quit">إنهاء اللعبة</button></div>`,true);
@@ -737,11 +773,11 @@ function playGame(set){const pool=HD.filter(x=>set==="all"||x.u===set);const g=g
   // countdown 3,2,1
   (function intro(){ac();let n=3;$g("#gm-body").innerHTML=`<div class="gm-count" id="gm-cn">3</div><p class="small muted" style="text-align:center">استعد…</p>`;SFX.beep();
     const t=setInterval(()=>{n--;const el=$g("#gm-cn");if(!el){clearInterval(t);return}if(n>0){el.textContent=n;el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop");SFX.beep()}else{clearInterval(t);el.textContent="انطلق!";el.classList.add("pop");SFX.go();setTimeout(next,550)}},650)})();
-  function next(){if(i>=ROUND||lives<=0)return end();q=makeQ(pool,used,i);locked=false;orderPick=[];hud();
+  function next(){if(i>=ROUND||lives<=0)return end();q=T?makeTermQ(pool,used,i):makeQ(pool,used,i);locked=false;orderPick=[];hud();
     const body=$g("#gm-body");body.classList.remove("in");void body.offsetWidth;body.classList.add("in");
     if(q.type==="order"){body.innerHTML=`<div class="gm-q order"><span class="tiny">⚡ تحدي الترتيب · نقاط مضاعفة</span><div>رتّب من الأقدم إلى الأحدث</div></div><div class="gm-opts">${q.items.map(x=>`<button class="gm-opt" data-oid="${x.id}"><span class="gm-n"></span>${esc(x.e)}</button>`).join("")}</div>`;
       body.querySelectorAll("[data-oid]").forEach(b=>b.onclick=()=>{if(locked||orderPick.includes(b.dataset.oid))return;SFX.tap();orderPick.push(b.dataset.oid);b.classList.add("picked");b.querySelector(".gm-n").textContent=orderPick.length;if(orderPick.length===3)answer(orderPick.join()===q.answer.join())})}
-    else{body.innerHTML=`<div class="gm-q"><span class="tiny">${q.type==="when"?"متى كان؟":"ماذا حدث في؟"}</span><div>${esc(q.q)}</div></div><div class="gm-opts">${q.opts.map((o,k)=>`<button class="gm-opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>`;
+    else{body.innerHTML=`<div class="gm-q${q.type==="def"?" long":""}"><span class="tiny">${{when:"متى كان؟",what:"ماذا حدث في؟",term:"ما معنى هذا المصطلح؟",def:"أي مصطلح يوافق هذا التعريف؟"}[q.type]}</span><div>${esc(q.q)}</div></div><div class="gm-opts${q.type==="term"?" long":""}">${q.opts.map((o,k)=>`<button class="gm-opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>`;
       body.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{if(locked)return;const ok=q.opts[+b.dataset.k]===q.answer;b.classList.add(ok?"ok":"bad");answer(ok)})}
     tEnd=Date.now()+TIME*1000;lastTick=0;clearInterval(iv);iv=setInterval(()=>{const left=Math.max(0,tEnd-Date.now());const bar=$g("#gm-time");bar.style.width=(left/(TIME*10))+"%";bar.classList.toggle("low",left<5000);
       const sec=Math.ceil(left/1000);if(left<5000&&sec!==lastTick&&left>0){lastTick=sec;SFX.tick()}if(left<=0&&!locked)answer(false,true)},100)}
@@ -756,10 +792,11 @@ function playGame(set){const pool=HD.filter(x=>set==="all"||x.u===set);const g=g
     const body=$g("#gm-body");
     if(q.type!=="order")body.querySelectorAll("[data-k]").forEach(b=>{if(q.opts[+b.dataset.k]===q.answer)b.classList.add("ok")});
     const fb=document.createElement("div");fb.className="gm-fb "+(ok?"ok":"bad");
-    fb.innerHTML=ok?`<b>${["أحسنت!","صحيح!","برافو!","ممتاز!","هايل!"][Math.floor(Math.random()*5)]}</b> ${esc(q.type==="order"?"الترتيب صحيح":q.ev.e+": "+hdFmt(q.ev.d))}`
+    fb.innerHTML=T?(ok?`<b>${["أحسنت!","صحيح!","برافو!","ممتاز!","هايل!"][Math.floor(Math.random()*5)]}</b> ${esc(q.ev.t)}`:`<b>${timeout?"⏰ انتهى الوقت!":"ليس هذا"}</b> <b>${esc(q.ev.t)}</b>: ${esc(q.ev.def)}`)
+      :ok?`<b>${["أحسنت!","صحيح!","برافو!","ممتاز!","هايل!"][Math.floor(Math.random()*5)]}</b> ${esc(q.type==="order"?"الترتيب صحيح":q.ev.e+": "+hdFmt(q.ev.d))}`
       :`<b>${timeout?"⏰ انتهى الوقت!":"ليس هذا"}</b> ${q.type==="order"?q.items.slice().sort((a,b)=>hdKey(a.d)-hdKey(b.d)).map(x=>esc(x.e)+" ("+hdFmt(x.d)+")").join(" ← "):esc(q.ev.e)+": <b>"+hdFmt(q.ev.d)+"</b>"}`;
     body.appendChild(fb);const nb=document.createElement("button");nb.className="btn block";nb.textContent=(i+1>=ROUND||lives<=0)?"🏁 النتيجة":"التالي ←";nb.onclick=()=>{SFX.tap();i++;next()};body.appendChild(nb);hud()}
-  function end(quit){clearInterval(iv);locked=true;g.plays=(g.plays||0)+1;const before=rankOf(g.xp||0);g.xp=(g.xp||0)+score;const after=rankOf(g.xp);const rec=score>(g.best||0)&&score>0;if(rec)g.best=score;save();
+  function end(quit){clearInterval(iv);locked=true;g.plays=(g.plays||0)+1;const before=rankOf(g.xp||0);g.xp=(g.xp||0)+score;const after=rankOf(g.xp);const bk=T?"tbest":"best";const rec=score>(g[bk]||0)&&score>0;if(rec)g[bk]=score;save();
     const answered=Math.max(1,i+(q&&locked?1:0));const stars=lives<=0?(correct>=5?1:0):correct>=9?3:correct>=6?2:correct>=3?1:0;const up=after.name!==before.name;
     const prog=after.next?Math.round((g.xp-after.from)/(after.next[0]-after.from)*100):100;
     $g(".game").innerHTML=`<div class="gm-face pop">${MASCOT[stars>=2?"happy":stars===1?"neutral":"worried"]}</div>
@@ -767,10 +804,10 @@ function playGame(set){const pool=HD.filter(x=>set==="all"||x.u===set);const g=g
      <div class="gm-stars">${[1,2,3].map(k=>`<span class="${k<=stars?"on":""}" style="animation-delay:${k*.18}s">★</span>`).join("")}</div>
      <div class="stats"><div class="stat"><div class="k">النقاط</div><div class="v">${score}</div></div><div class="stat"><div class="k">صحيحة · أطول سلسلة</div><div class="v">${correct}<small> · 🔥${bestCombo}</small></div></div></div>
      <div class="gm-rank"><div class="row"><b class="grow">${up?"⬆️ رتبة جديدة: ":"رتبتك: "}${after.name}</b><span class="tiny">${g.xp} XP</span></div><div class="progress"><i style="width:${prog}%;background:var(--accent)"></i></div>${after.next?`<div class="tiny">باقي ${after.next[0]-g.xp} نقطة لتصبح «${after.next[1]}»</div>`:`<div class="tiny">وصلت لأعلى رتبة!</div>`}</div>
-     ${missed.length?`<div class="card col" style="box-shadow:none"><h3>📌 راجع هذه التواريخ</h3>${[...new Map(missed.map(x=>[x.id,x])).values()].map(x=>`<div class="gm-rev"><b>${hdFmt(x.d)}</b><span>${esc(x.e)}</span></div>`).join("")}</div>`:`<p class="small muted" style="text-align:center">ولا خطأ واحد! راك تحفظ مليح.</p>`}
+     ${missed.length?`<div class="card col" style="box-shadow:none"><h3>📌 ${T?"راجع هذه المصطلحات":"راجع هذه التواريخ"}</h3>${[...new Map(missed.map(x=>[x.id,x])).values()].map(x=>T?`<div class="gm-rev t"><b>${esc(x.t)}</b><span>${esc(x.def)}</span></div>`:`<div class="gm-rev"><b>${hdFmt(x.d)}</b><span>${esc(x.e)}</span></div>`).join("")}</div>`:`<p class="small muted" style="text-align:center">ولا خطأ واحد! راك تحفظ مليح.</p>`}
      <div class="row"><button class="btn grow" id="gm-again">🔄 جولة أخرى</button><button class="btn ghost grow" id="gm-close">خروج</button></div>`;
     if(rec||up){SFX.record();confetti(sheetEl,120);buzz([60,40,60,40,150])}else if(lives<=0)SFX.lose();else SFX.end();
-    $g("#gm-again").onclick=()=>{ov.remove();playGame(set)};$g("#gm-close").onclick=()=>{ov.remove();render()}}
+    $g("#gm-again").onclick=()=>{ov.remove();playGame(set,kind)};$g("#gm-close").onclick=()=>{ov.remove();render()}}
 }
 
 /* ---------- backup & restore ---------- */
@@ -879,7 +916,7 @@ function bind(){
   document.querySelectorAll("[data-ex]").forEach(b=>b.onclick=()=>openExercise(b.dataset.ex));
   document.querySelectorAll("[data-open-sub]").forEach(b=>b.onclick=()=>{const id=b.dataset.openSub;ui.openSub=ui.openSub||{};ui.openSub[id]=true;render();const d=document.querySelector(`details[data-sub="${id}"]`);if(d)d.scrollIntoView({block:"start",behavior:"smooth"})});
   bindExternal(document);
-  document.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>({calc:openCalc,mock:openMock,share:openShare,book:openBooking,game:openGame})[b.dataset.tool]());
+  document.querySelectorAll("[data-tool]").forEach(b=>b.onclick=()=>({calc:openCalc,mock:openMock,share:openShare,book:openBooking,game:openGame,terms:openTerms})[b.dataset.tool]());
   {const mx=document.getElementById("msg-x");if(mx)mx.onclick=()=>{ui.hideMsg=CFG.message;render()}}
   {const x=document.getElementById("upd-x");if(x)x.onclick=()=>{ui.hideUpd=true;render()};const c=document.getElementById("upd-check");if(c)c.onclick=()=>{c.disabled=true;c.textContent="جارٍ البحث…";checkUpdate(true)}}
   document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{S.mode=b.dataset.mode;save();render();toast("تم التبديل إلى "+MODES[S.mode].name)});
