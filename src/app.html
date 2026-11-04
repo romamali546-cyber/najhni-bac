@@ -219,6 +219,71 @@ nav.tabs button[aria-current="page"]{color:var(--primary);font-weight:700}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
 .pop{animation:pop .45s ease}
+
+/* ===== v2 look: chunky, tactile, game-like ===== */
+.btn{border-radius:16px;font-weight:700;letter-spacing:.01em;box-shadow:0 4px 0 var(--primary-press);transition:transform .08s,box-shadow .08s;position:relative}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--primary-press)}
+.btn.soft{box-shadow:0 4px 0 color-mix(in srgb,var(--primary) 30%,var(--primary-soft))}
+.btn.soft:active{box-shadow:0 1px 0 color-mix(in srgb,var(--primary) 30%,var(--primary-soft))}
+.btn.ghost{box-shadow:0 3px 0 var(--border);background:var(--surface)}
+.btn.ghost:active{box-shadow:0 0 0 var(--border)}
+.card{border-radius:20px;border-width:2px;box-shadow:none}
+.stat{border-radius:18px;border-width:2px}
+.opt{border-width:2px;border-radius:16px;box-shadow:0 3px 0 var(--border);transition:transform .08s,box-shadow .08s}
+.opt:active{transform:translateY(2px);box-shadow:0 1px 0 var(--border)}
+.opt[aria-pressed="true"]{box-shadow:0 3px 0 var(--primary)}
+.tool{border-width:2px;border-radius:20px;box-shadow:0 4px 0 var(--border);transition:transform .08s,box-shadow .08s}
+.tool:active{transform:translateY(3px);box-shadow:0 1px 0 var(--border)}
+.tool span{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:24px;margin-bottom:4px}
+.tool[data-tool="calc"] span{background:#E3EBFB}.tool[data-tool="mock"] span{background:#FDEBD6}.tool[data-tool="share"] span{background:#F8E3EE}.tool[data-tool="book"] span{background:#DDF3EC}
+.gamecard{border-radius:22px;box-shadow:0 5px 0 #1C1B4A;transition:transform .08s,box-shadow .08s;min-height:76px}
+.gamecard.terms{box-shadow:0 5px 0 #073F39}
+.gamecard:active{transform:translateY(4px);box-shadow:0 1px 0 #1C1B4A}
+.gamecard .gc-ic{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.16);display:grid;place-items:center;animation:wiggle 3s ease-in-out infinite}
+.gc-go{box-shadow:0 3px 0 #B9732E}
+@keyframes wiggle{0%,86%,100%{transform:rotate(0)}90%{transform:rotate(-10deg)}94%{transform:rotate(10deg)}}
+.hero{border-radius:24px;box-shadow:0 5px 0 rgba(0,0,0,.18)}
+.hero .mascot{animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-5px)}}
+.cd{border-radius:24px;box-shadow:0 5px 0 #06140F}
+nav.tabs{border-top-width:2px}
+nav.tabs button svg{width:26px;height:26px;transition:transform .15s}
+nav.tabs button[aria-current="page"] svg{transform:translateY(-2px) scale(1.12)}
+nav.tabs button[aria-current="page"]::after{content:"";width:22px;height:4px;border-radius:4px;background:var(--primary);margin-top:2px}
+.streakpill{display:inline-flex;align-items:center;gap:4px;font-weight:800;color:var(--flame);font-family:var(--display);font-size:17px}
+.streakpill .fl{display:inline-block;animation:flick 1.2s ease-in-out infinite alternate;transform-origin:50% 90%}
+@keyframes flick{to{transform:scale(1.15) rotate(4deg)}}
+.check{box-shadow:0 3px 0 var(--border)}.sess.done .check{box-shadow:0 3px 0 var(--primary-press)}
+/* daily splash */
+.splash{position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;color:#fff;
+  background:radial-gradient(120% 80% at 50% 0%,#17A57F 0%,#0A6650 45%,#073F32 100%);
+  padding:calc(28px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));overflow:hidden;animation:fadein .35s}
+@keyframes fadein{from{opacity:0}}
+.splash .sp-date{font-size:13px;letter-spacing:.04em;opacity:.85;font-weight:600}
+.splash .sp-icon{font-size:64px;line-height:1;animation:popin .6s cubic-bezier(.2,1.6,.4,1) .2s both}
+.splash .sp-quote{font-size:26px;font-weight:800;line-height:1.55;max-width:460px;text-wrap:balance;animation:rise .6s ease-out .35s both}
+.splash .sp-sub{font-size:15px;opacity:.88;animation:rise .6s ease-out .5s both}
+.splash .sp-m svg{width:150px;height:150px;animation:bob 2.4s ease-in-out infinite}
+.splash .sp-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;animation:rise .6s ease-out .65s both}
+.splash .sp-chip{background:rgba(255,255,255,.14);border:1.5px solid rgba(255,255,255,.22);border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px}
+.splash .btn{width:100%;max-width:460px;background:#F0A85A;color:#2B1A08;box-shadow:0 5px 0 #B9732E;font-size:18px;min-height:56px;animation:rise .6s ease-out .8s both}
+.splash .rays{position:absolute;inset:-50%;background:repeating-conic-gradient(from 0deg,rgba(255,255,255,.05) 0 10deg,transparent 10deg 20deg);animation:spin 40s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes popin{from{transform:scale(0) rotate(-20deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+/* session celebration */
+.celebrate{position:fixed;inset:0;z-index:35;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px max(20px,env(safe-area-inset-right,0px));animation:fadein .25s;overflow:hidden}
+.celebrate .ce-m svg{width:170px;height:170px;animation:popin .6s cubic-bezier(.2,1.6,.4,1) both}
+.celebrate h1{font-size:28px;color:var(--primary);animation:rise .5s .2s both}
+.celebrate .ce-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:420px;animation:rise .5s .35s both}
+.celebrate .ce-box{border:2px solid var(--border);border-radius:18px;padding:10px 6px;background:var(--surface)}
+.celebrate .ce-box b{display:block;font-family:var(--display);font-size:24px}
+.celebrate .ce-box span{font-size:12px;color:var(--text2);font-weight:600}
+.celebrate .ce-box.xp{border-color:#F6C343}.celebrate .ce-box.xp b{color:#C9930F}
+.celebrate .ce-box.st{border-color:var(--flame)}.celebrate .ce-box.st b{color:var(--flame)}
+.celebrate .ce-box.tm{border-color:var(--info)}.celebrate .ce-box.tm b{color:var(--info)}
+.celebrate .btn{width:100%;max-width:420px;min-height:54px;font-size:17px;animation:rise .5s .5s both}
+@media (prefers-reduced-motion:reduce){.splash *,.celebrate *,.rays,.gc-ic,.hero .mascot{animation:none!important}}
 </style>
 
 <div id="root"></div>
@@ -344,7 +409,7 @@ function render(){
   const md=mood();setIcon(md);
   const views={home:vHome,plan:vPlan,subjects:vSubjects,progress:vProgress,settings:vSettings,about:vAbout};
   $("#root").innerHTML=`<main class="app">${views[ui.tab]()}</main>${nav()}`;
-  bind();nativeSync();
+  bind();nativeSync();setTimeout(maybeSplash,50);
 }
 const NAVI=[["home","الرئيسية",'<path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/>'],["plan","البرنامج",'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/>'],["subjects","المواد",'<path d="M5 4h10l4 4v12H5z"/><path d="M9 12h6M9 16h6"/>'],["progress","التقدم",'<path d="M5 20V10M12 20V4M19 20v-7"/>'],["settings","الإعدادات",'<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>']];
 function nav(){return `<nav class="tabs"><div class="in">${NAVI.map(([k,t,p])=>`<button data-tab="${k}" ${ui.tab===k?'aria-current="page"':""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>${t}</button>`).join("")}</div></nav>`}
@@ -361,7 +426,7 @@ function vHome(){
     <div class="col" style="gap:6px"><h1>${md==="happy"?gx("فنّوك فرحان بيك!","فنّوك فرحان بيكِ!"):md==="neutral"?gx("فنّوك مستنّيك","فنّوك مستنّيكِ"):md==="worried"?"فنّوك قلقان شوية":gx("فنّوك ناعس بلا بيك","فنّوك ناعس بلا بيكِ")}</h1><p>${esc(heroMessage(md))}</p></div></section>
   ${cdCard()}
   <div class="stats">
-    <div class="stat"><div class="k">${FLAME}أيام متتالية</div><div class="v">${streak()} <small>يوم</small></div></div>
+    <div class="stat"><div class="k">أيام متتالية</div><div class="v"><span class="streakpill"><span class="fl">🔥</span>${streak()}</span> <small>يوم</small></div></div>
     <div class="stat"><div class="k">هدف اليوم</div><div class="v">${doneN}<small> / ${ses.length} جلسات</small></div><div class="progress"><i style="width:${ses.length?doneN/ses.length*100:0}%"></i></div></div>
   </div>
   <button class="gamecard" data-tool="game"><span class="gc-ic" aria-hidden="true">🎮</span><span class="grow"><b>سباق التواريخ</b><small>${(S.game&&S.game.best)?"أفضل نتيجة: "+S.game.best+" نقطة · ":""}احفظ تواريخ الباك وأنت تلعب</small></span><span class="gc-go">العب</span></button>
@@ -810,6 +875,72 @@ function playGame(set,kind){const T=kind==="terms";const pool=T?(set==="all"?[..
     $g("#gm-again").onclick=()=>{ov.remove();playGame(set,kind)};$g("#gm-close").onclick=()=>{ov.remove();render()}}
 }
 
+/* ---------- daily splash ---------- */
+const DAILY=[
+ ["🔥","الباك ماشي امتحان برك، هو الباب اللي يحلّ مستقبلك. افتحو بيدك!"],
+ ["🚀","كل صفحة تقراها اليوم، هي خطوة نحو الجامعة اللي تحلم بيها."],
+ ["💪","التعب يروح، والنتيجة تبقى. اصبر شوية، النجاح يستاهل."],
+ ["🎯","ما تقارنش روحك بغيرك. قارن روحك بنتا تاع البارح."],
+ ["⏳","الوقت اللي يفوت ما يرجعش، لكن الوقت اللي قدامك مازال ليك."],
+ ["🌙","ليلة الباك تفرح بيها غير إذا تعبت عليها من دروك."],
+ ["🏆","الناجحين ماشي أذكى منك، هوما برك ما حبسوش."],
+ ["📚","ساعة مراجعة اليوم، خير من عشرة ساعات قلق في جوان."],
+ ["⚡","مستقبلك بين يديك. اليوم تختار: تتقدم ولا تستنى؟"],
+ ["🌟","كل خطأ تصححو اليوم، هو نقطة تربحها يوم الامتحان."],
+ ["🦊","فنّوك يعرفك: راك قادر. بقات غير تبدا."],
+ ["🧠","العقل كيما العضلة: كل ما تخدمو، يقوى."],
+ ["🎓","تخيّل نهار تشوف اسمك في قائمة الناجحين. هاذاك النهار يتبنى اليوم."],
+ ["🔑","الاستمرارية أقوى من الموهبة. جلسة صغيرة كل يوم تفرق."],
+ ["🌱","ما تستناش الدافع يجيك. ابدا، والدافع يلحقك."],
+ ["🏃","الباك ماراطون ماشي سباق 100 متر. حافظ على الريتم."],
+ ["💡","الدرس اللي ما فهمتوش اليوم، هو اللي لازم تبدا بيه."],
+ ["🛡️","الهاتف يقدر يستنى، الباك ما يستناش."],
+ ["🌄","الصباح بكري؟ هكذا يبداو الأبطال نهارهم."],
+ ["🧗","الطريق صعيب؟ معناها راك طالع للفوق."],
+ ["🎯","هدف اليوم بسيط: كمّل برنامجك وما تزيدش تفكر."],
+ ["❤️","دير هذا لروحك، ولوالديك اللي يستناو هذاك الفرح."],
+ ["📈","شوية كل يوم = بزاف في آخر العام."],
+ ["🧩","كل محور تكمّلو، قطعة من صورة نجاحك."],
+ ["🔥","النار اللي فيك أقوى من أي امتحان. شعلها!"],
+ ["⭐","ماشي لازم تكون مثالي، لازم تكون حاضر كل يوم."],
+ ["🗓️","كل يوم يقرب الباك، وكل يوم تقرب أنت من الهدف."],
+ ["🎶","حط الهاتف بعيد، ركّز 50 دقيقة، وشوف السحر."],
+ ["🧭","اللي يعرف وين رايح، يوصل. وأنت تعرف: للنجاح."],
+ ["🏅","المعدل العالي ماشي حظ، هو مجموع أيام كيما اليوم."],
+ ["🌍","العالم يستنى اللي تقدر تقدّمو. ابدا من هنا."],
+ ["⏰","دقيقة تراجع فيها اليوم، تحميك من ساعة ندم غدوة."],
+ ["🦁","كون شجاع مع المادة اللي تخوّفك، هي اللي تفرق في المعدل."],
+ ["🌈","بعد الباك راحة طويلة. دروك وقت الخدمة."],
+ ["🚪","الباك مصير. وأنت اللي تكتب كيفاش يكون."],
+ ["✨","اليوم يوم جديد، وصفحة بيضاء. اكتب فيها حاجة تفرّحك."]
+];
+function maybeSplash(){if(!S||ui.splashShown)return;const t=ymd(today());let seen=null;try{seen=localStorage.getItem("fennouk-splash")}catch(e){}if(seen===t)return;ui.splashShown=true;
+  const n=dayDiff(new Date(2026,0,1),today());const q=DAILY[((n%DAILY.length)+DAILY.length)%DAILY.length];const bp=bacParts();const st=streak();const md=studied(today())?"happy":missedDays()>=2?"sad":"happy";
+  const el=document.createElement("div");el.className="splash";el.setAttribute("role","dialog");
+  el.innerHTML=`<div class="rays"></div><div class="sp-date">${fmtDate(today())}</div>
+   <div class="sp-icon" aria-hidden="true">${q[0]}</div>
+   <div class="col" style="align-items:center;gap:10px;position:relative"><div class="sp-quote">${esc(q[1])}</div><div class="sp-sub">${gx("صباح الخير يا ","صباح الخير يا ")}${esc(S.name)}${missedDays()>=2?"، فنّوك توحّشك!":""}</div></div>
+   <div class="sp-m">${MASCOT[md]}</div>
+   <div class="sp-row">${bp?`<span class="sp-chip">⏳ باقي ${bp.d} يوم للباك</span>`:""}<span class="sp-chip">🔥 ${st} يوم متتالي</span></div>
+   <button class="btn" id="sp-go">${studied(today())?"نكمّلو 💪":"يلا نبداو 🚀"}</button>`;
+  document.body.appendChild(el);try{localStorage.setItem("fennouk-splash",t)}catch(e){}
+  el.querySelector("#sp-go").onclick=()=>{SFX.go();buzz([20,40,30]);el.style.transition="opacity .3s,transform .3s";el.style.opacity="0";el.style.transform="scale(1.04)";setTimeout(()=>el.remove(),300)}}
+
+/* ---------- session celebration ---------- */
+function celebrate(subject,min){const st=streak();const ses=sessionsFor(today());const lg=dayLog(today());const doneN=ses.filter(x=>lg.done.includes(x.key)).length;const all=doneN>=ses.length;
+  const xp=min+ (all?20:0);S.xp=(S.xp||0)+xp;save();
+  const el=document.createElement("div");el.className="celebrate";
+  el.innerHTML=`<div class="ce-m">${MASCOT.happy}</div><h1>${all?"🎉 هدف اليوم مكتمل!":"جلسة مكتملة!"}</h1>
+   <p class="muted" style="animation:rise .5s .25s both">${esc(fill(pick(all?MSG.daily_goal_done:MSG.session_done,Date.now()%97),{subject,minutes:min}))}</p>
+   <div class="ce-row"><div class="ce-box xp"><b>+${xp}</b><span>نقاط XP</span></div><div class="ce-box st"><b>🔥 ${st}</b><span>يوم متتالي</span></div><div class="ce-box tm"><b>${min}</b><span>دقيقة</span></div></div>
+   <div class="progress" style="width:100%;max-width:420px;height:12px;animation:rise .5s .4s both"><i style="width:${ses.length?doneN/ses.length*100:0}%"></i></div><div class="tiny">${doneN} من ${ses.length} جلسات اليوم</div>
+   <button class="btn" id="ce-go">واصل</button>`;
+  document.body.appendChild(el);confetti(el,all?140:70);if(all)SFX.record();else SFX.end();buzz(all?[40,60,40,60,160]:[30,50,80]);
+  el.querySelector("#ce-go").onclick=()=>{SFX.tap();el.remove();render()}}
+
+/* light haptic tick on every button, like a game controller */
+document.addEventListener("click",e=>{const b=e.target.closest("button,.btn,.opt,.tool,.gamecard");if(b&&!b.disabled)buzz(8)},true);
+
 /* ---------- backup & restore ---------- */
 function b64utf8(str){return btoa(unescape(encodeURIComponent(str)))}
 async function doBackup(){const data=JSON.stringify({app:"najahni-bac",v:1,saved:new Date().toISOString(),state:S});const name="najahni-bac-backup-"+ymd(today())+".json";
@@ -963,7 +1094,7 @@ function openTimer(key){
     const l=S.log[day]||(S.log[day]={done:[],min:0,items:[]});l.items=l.items||[];
     if(!l.done.includes(key)){l.done.push(key);l.min+=min;l.items.push({key,id:x.id,min})}
     const ch=ov.querySelector("#t-ch");if(ch&&ch.checked){const sub=studySubjects().find(s=>s.id===x.id);const a=S.chapDone[x.id]||(S.chapDone[x.id]=[]);const nx=sub.chapters.findIndex((c,j)=>!a.includes(j));if(nx>-1)a.push(nx)}
-    save();ov.remove();render();toast(fill(pick(MSG.session_done,Date.now()%97),{subject:subjName(x.id),minutes:min}));}
+    save();ov.remove();render();celebrate(subjName(x.id),min);}
 }
 
 /* ---------- native Android bridge (inactive on the web) ---------- */
