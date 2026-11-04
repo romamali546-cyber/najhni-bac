@@ -159,6 +159,25 @@ nav.tabs button[aria-current="page"]{color:var(--primary);font-weight:700}
 .gm-n{min-width:24px;height:24px;border-radius:50%;background:var(--primary);color:var(--on-primary);font-size:13px;display:inline-grid;place-items:center}.gm-n:empty{display:none}
 .gm-fb{border-radius:12px;padding:10px 12px;font-size:14px;line-height:1.7}.gm-fb.ok{background:var(--primary-soft)}.gm-fb.bad{background:var(--accent-soft)}
 .gm-rev{display:grid;grid-template-columns:auto 1fr;gap:10px;padding:6px 0;border-top:1px solid var(--border);font-size:14px}.gm-rev:first-of-type{border-top:0}.gm-rev b{color:var(--primary);white-space:nowrap}
+.gamesheet{position:relative;overflow-x:hidden}
+.gamesheet.hit{animation:hit .35s}
+@keyframes hit{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+.confetti{position:absolute;inset:0;pointer-events:none;z-index:5}
+.gm-lives span{transition:filter .3s,transform .3s;display:inline-block}.gm-lives span.lost{filter:grayscale(1) opacity(.35);transform:scale(.8)}
+.gm-score.bump{animation:bump .4s}@keyframes bump{50%{transform:scale(1.35);color:var(--accent)}}
+.gm-stage{position:relative;display:flex;flex-direction:column;align-items:center;min-height:100px}
+.gm-combo{font-weight:800;color:var(--flame);font-size:15px;min-height:22px}
+.gm-float{position:absolute;top:10px;inset-inline-start:58%;font-family:var(--display);font-weight:700;font-size:26px;color:var(--primary);animation:float .9s ease-out forwards;pointer-events:none}
+@keyframes float{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-50px)}}
+.gm-face.shake{animation:fshake .4s}@keyframes fshake{25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.gm-count{font-family:var(--display);font-weight:700;font-size:96px;text-align:center;color:var(--primary);line-height:1.2;padding:20px 0}
+#gm-body.in{animation:slidein .3s ease-out}@keyframes slidein{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.gm-q.order{background:linear-gradient(135deg,#2B2A6B,#4B3A8F);color:#fff}.gm-q.order .tiny{color:#F0A85A}
+.gm-timer i.low{animation:pulse .5s infinite alternate}@keyframes pulse{to{opacity:.45}}
+.gm-stars{display:flex;justify-content:center;gap:10px;font-size:44px;line-height:1}
+.gm-stars span{color:var(--border);transform:scale(.4);animation:star .5s forwards}.gm-stars span.on{color:#F6C343;text-shadow:0 2px 8px rgba(246,195,67,.5)}
+@keyframes star{to{transform:scale(1)}}
+.gm-rank{background:var(--accent-soft);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
 .tools{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .tool{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:start;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;min-height:92px}
 .tool span{font-size:22px;line-height:1.2}.tool b{font-size:14.5px}.tool small{font-size:12px;color:var(--text2)}
@@ -668,6 +687,7 @@ function openGame(){const g=gstate();const nDz=HD.filter(x=>x.u==="dz").length,n
   const mastered=HD.filter(x=>(g.right[x.id]||0)>=3&&!(g.wrong[x.id]>g.right[x.id])).length;
   const ov=sheet(`${sheetHead("🎮","سباق التواريخ","أجب بسرعة قبل أن ينتهي الوقت. لديك 3 قلوب")}
    <div class="gm-mascot">${MASCOT.happy}</div>
+   <div class="gm-rank"><div class="row"><b class="grow">🎖️ رتبتك: ${rankOf(g.xp||0).name}</b><span class="tiny">${g.xp||0} XP</span></div></div>
    <div class="stats"><div class="stat"><div class="k">أفضل نتيجة</div><div class="v">${g.best||0}</div></div><div class="stat"><div class="k">تواريخ أتقنتها</div><div class="v">${mastered}<small> / ${HD.length}</small></div></div></div>
    <div class="small" style="font-weight:600">اختر الجولة</div>
    <div class="choice">
@@ -675,43 +695,83 @@ function openGame(){const g=gstate();const nDz=HD.filter(x=>x.u==="dz").length,n
     <button class="opt" data-gset="dz"><span style="font-size:24px">🇩🇿</span><span class="grow"><b>الثورة الجزائرية</b><span class="small muted">${nDz} حدثاً من 1945 إلى 1971</span></span></button>
     <button class="opt" data-gset="w"><span style="font-size:24px">🧭</span><span class="grow"><b>الحرب الباردة والعالم</b><span class="small muted">${nW} حدثاً من 1945 إلى 1991</span></span></button>
    </div>
-   <p class="tiny">التواريخ التي تخطئ فيها تعود إليك أكثر حتى تحفظها. كل 4 أسئلة يأتيك سؤال ترتيب الأحداث.</p>
+   <p class="tiny">أجب بسرعة لتربح نقاطاً أكثر، واجمع سلسلة إجابات صحيحة لتضاعفها. سؤال الترتيب نقاطه مضاعفة. التواريخ التي تخطئ فيها تعود إليك حتى تحفظها.</p>
    <button class="btn ghost" data-close>إغلاق</button>`);
   ov.querySelectorAll("[data-gset]").forEach(b=>b.onclick=()=>{ov.remove();playGame(b.dataset.gset)})}
+/* sound: everything synthesised with WebAudio (no audio files) */
+let AC=null;
+function ac(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();return AC}catch(e){return null}}
+function tone(f,dur,type="triangle",vol=.18,at=0,slide=0){const c=ac();if(!c||gstate().mute)return;const t=c.currentTime+at;const o=c.createOscillator(),g=c.createGain();
+  o.type=type;o.frequency.setValueAtTime(f,t);if(slide)o.frequency.exponentialRampToValueAtTime(slide,t+dur);
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+.02)}
+const SFX={
+  tap:()=>tone(520,.05,"sine",.08),
+  tick:()=>tone(1100,.04,"square",.05),
+  beep:()=>tone(440,.14,"square",.1),
+  go:()=>{tone(880,.25,"square",.12);tone(1320,.3,"triangle",.1,.05)},
+  ok:(combo=1)=>{const k=Math.pow(2,Math.min(combo-1,7)/12);[0,.07,.14].forEach((d,i)=>tone([660,880,1320][i]*k,.14,"triangle",.17,d))},
+  bad:()=>{tone(220,.3,"sawtooth",.12,0,110);tone(160,.35,"square",.06,.03,90)},
+  combo:()=>[523,659,784,1047,1319].forEach((f,i)=>tone(f,.1,"square",.08,i*.05)),
+  end:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.22,"triangle",.15,i*.12)),
+  record:()=>{[523,659,784,1047,784,1047,1319,1568].forEach((f,i)=>tone(f,.18,"square",.09,i*.09));[1568,2093].forEach((f,i)=>tone(f,.5,"sine",.06,.8+i*.1))},
+  lose:()=>[392,330,262,196].forEach((f,i)=>tone(f,.25,"triangle",.14,i*.15))};
+function buzz(p){try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}}
+function confetti(host,n=70){const c=document.createElement("canvas");c.className="confetti";host.appendChild(c);const W=c.width=host.clientWidth,H=c.height=host.clientHeight;const x=c.getContext("2d");
+  const cols=["#F0A85A","#3BC495","#7A4FD6","#3A6FD8","#FF7A2F","#F6C343"];const ps=Array.from({length:n},()=>({x:W/2+(Math.random()-.5)*80,y:H*.35,vx:(Math.random()-.5)*9,vy:-Math.random()*9-4,r:Math.random()*6+4,c:cols[Math.floor(Math.random()*cols.length)],a:Math.random()*6}));
+  const t0=performance.now();(function f(t){const k=(t-t0)/1000;x.clearRect(0,0,W,H);ps.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=.2;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.globalAlpha=Math.max(0,1-k/1.6);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});if(k<1.6)requestAnimationFrame(f);else c.remove()})(t0)}
+const RANKS=[[0,"مبتدئ"],[150,"تلميذ مجتهد"],[400,"مؤرخ صغير"],[800,"حافظ التواريخ"],[1500,"خبير الباك"],[2500,"أسطورة التاريخ"]];
+function rankOf(xp){let r=RANKS[0],nx=null;for(let k=0;k<RANKS.length;k++){if(xp>=RANKS[k][0]){r=RANKS[k];nx=RANKS[k+1]||null}}return {name:r[1],from:r[0],next:nx}}
+
 function playGame(set){const pool=HD.filter(x=>set==="all"||x.u===set);const g=gstate();const ROUND=10,TIME=15;
-  let i=0,score=0,lives=3,combo=0,correct=0,q=null,tEnd=0,iv=null,locked=false,orderPick=[];const used=new Set(),missed=[];
-  const ov=sheet(`<div class="game"><div class="gm-top"><span id="gm-lives"></span><span class="grow" style="text-align:center" id="gm-step"></span><span id="gm-score" class="gm-score"></span></div>
-    <div class="gm-timer"><i id="gm-time"></i></div><div class="gm-face" id="gm-face">${MASCOT.neutral}</div><div id="gm-body"></div><button class="btn ghost" id="gm-quit">إنهاء اللعبة</button></div>`,true);
-  const $g=s=>ov.querySelector(s);$g("#gm-quit").onclick=()=>end(true);
-  const hud=()=>{$g("#gm-lives").textContent="❤️".repeat(lives)+"🤍".repeat(3-lives);$g("#gm-step").textContent=`سؤال ${Math.min(i+1,ROUND)} من ${ROUND}${combo>=2?" · 🔥×"+combo:""}`;$g("#gm-score").textContent=score};
-  const face=m=>{$g("#gm-face").innerHTML=MASCOT[m];$g("#gm-face").classList.remove("pop");void $g("#gm-face").offsetWidth;$g("#gm-face").classList.add("pop")};
-  function next(){if(i>=ROUND||lives<=0)return end();q=makeQ(pool,used,i);locked=false;orderPick=[];face("neutral");hud();
-    const body=$g("#gm-body");
-    if(q.type==="order"){body.innerHTML=`<div class="gm-q"><span class="tiny">رتّب الأحداث من الأقدم إلى الأحدث</span><div>اضغط عليها بالترتيب</div></div><div class="gm-opts">${q.items.map(x=>`<button class="gm-opt" data-oid="${x.id}"><span class="gm-n"></span>${esc(x.e)}</button>`).join("")}</div>`;
-      body.querySelectorAll("[data-oid]").forEach(b=>b.onclick=()=>{if(locked||orderPick.includes(b.dataset.oid))return;orderPick.push(b.dataset.oid);b.classList.add("picked");b.querySelector(".gm-n").textContent=orderPick.length;if(orderPick.length===3)answer(orderPick.join()===q.answer.join())})}
+  let i=0,score=0,lives=3,combo=0,bestCombo=0,correct=0,q=null,tEnd=0,iv=null,locked=true,orderPick=[],lastTick=0;const used=new Set(),missed=[];
+  const ov=sheet(`<div class="game"><div class="gm-top"><button class="iconbtn sm" id="gm-mute" aria-label="الصوت">${g.mute?"🔇":"🔊"}</button><span id="gm-lives" class="gm-lives"></span><span class="grow" style="text-align:center" id="gm-step"></span><span id="gm-score" class="gm-score">0</span></div>
+    <div class="gm-timer"><i id="gm-time"></i></div><div class="gm-stage"><div class="gm-face" id="gm-face">${MASCOT.happy}</div><div class="gm-combo" id="gm-combo"></div></div><div id="gm-body"></div><button class="btn ghost" id="gm-quit">إنهاء اللعبة</button></div>`,true);
+  const $g=s=>ov.querySelector(s);const sheetEl=ov.querySelector(".sheet");sheetEl.classList.add("gamesheet");
+  $g("#gm-quit").onclick=()=>end(true);
+  $g("#gm-mute").onclick=()=>{g.mute=!g.mute;save();$g("#gm-mute").textContent=g.mute?"🔇":"🔊";if(!g.mute)SFX.tap()};
+  const hud=()=>{$g("#gm-lives").innerHTML=[0,1,2].map(k=>`<span class="${k<lives?"":"lost"}">❤️</span>`).join("");$g("#gm-step").textContent=`${Math.min(i+1,ROUND)} / ${ROUND}`};
+  const setScore=(add)=>{const el=$g("#gm-score");el.textContent=score;el.classList.remove("bump");void el.offsetWidth;el.classList.add("bump");
+    if(add){const f=document.createElement("div");f.className="gm-float";f.dir="ltr";f.textContent="+"+add;$g(".gm-stage").appendChild(f);setTimeout(()=>f.remove(),900)}};
+  const face=m=>{const el=$g("#gm-face");el.innerHTML=MASCOT[m];el.classList.remove("pop","shake");void el.offsetWidth;el.classList.add(m==="worried"||m==="sad"?"shake":"pop")};
+  const comboMsg=c=>{const el=$g("#gm-combo");if(c<2){el.textContent="";return}el.textContent=c>=5?`🔥🔥 ${c} متتالية! نار!`:c>=3?`🔥 سلسلة نارية ×${c}`:`👏 ${c} متتالية`;el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop")};
+  // countdown 3,2,1
+  (function intro(){ac();let n=3;$g("#gm-body").innerHTML=`<div class="gm-count" id="gm-cn">3</div><p class="small muted" style="text-align:center">استعد…</p>`;SFX.beep();
+    const t=setInterval(()=>{n--;const el=$g("#gm-cn");if(!el){clearInterval(t);return}if(n>0){el.textContent=n;el.classList.remove("pop");void el.offsetWidth;el.classList.add("pop");SFX.beep()}else{clearInterval(t);el.textContent="انطلق!";el.classList.add("pop");SFX.go();setTimeout(next,550)}},650)})();
+  function next(){if(i>=ROUND||lives<=0)return end();q=makeQ(pool,used,i);locked=false;orderPick=[];hud();
+    const body=$g("#gm-body");body.classList.remove("in");void body.offsetWidth;body.classList.add("in");
+    if(q.type==="order"){body.innerHTML=`<div class="gm-q order"><span class="tiny">⚡ تحدي الترتيب · نقاط مضاعفة</span><div>رتّب من الأقدم إلى الأحدث</div></div><div class="gm-opts">${q.items.map(x=>`<button class="gm-opt" data-oid="${x.id}"><span class="gm-n"></span>${esc(x.e)}</button>`).join("")}</div>`;
+      body.querySelectorAll("[data-oid]").forEach(b=>b.onclick=()=>{if(locked||orderPick.includes(b.dataset.oid))return;SFX.tap();orderPick.push(b.dataset.oid);b.classList.add("picked");b.querySelector(".gm-n").textContent=orderPick.length;if(orderPick.length===3)answer(orderPick.join()===q.answer.join())})}
     else{body.innerHTML=`<div class="gm-q"><span class="tiny">${q.type==="when"?"متى كان؟":"ماذا حدث في؟"}</span><div>${esc(q.q)}</div></div><div class="gm-opts">${q.opts.map((o,k)=>`<button class="gm-opt" data-k="${k}">${esc(o)}</button>`).join("")}</div>`;
       body.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{if(locked)return;const ok=q.opts[+b.dataset.k]===q.answer;b.classList.add(ok?"ok":"bad");answer(ok)})}
-    tEnd=Date.now()+TIME*1000;clearInterval(iv);iv=setInterval(()=>{const left=Math.max(0,tEnd-Date.now());$g("#gm-time").style.width=(left/(TIME*10))+"%";$g("#gm-time").classList.toggle("low",left<4000);if(left<=0&&!locked)answer(false,true)},100)}
+    tEnd=Date.now()+TIME*1000;lastTick=0;clearInterval(iv);iv=setInterval(()=>{const left=Math.max(0,tEnd-Date.now());const bar=$g("#gm-time");bar.style.width=(left/(TIME*10))+"%";bar.classList.toggle("low",left<5000);
+      const sec=Math.ceil(left/1000);if(left<5000&&sec!==lastTick&&left>0){lastTick=sec;SFX.tick()}if(left<=0&&!locked)answer(false,true)},100)}
   function answer(ok,timeout){locked=true;clearInterval(iv);const left=Math.max(0,tEnd-Date.now())/1000;const ids=q.type==="order"?q.items.map(x=>x.id):[q.ev.id];
     ids.forEach(id=>{g.seen[id]=1;if(ok)g.right[id]=(g.right[id]||0)+1;else g.wrong[id]=(g.wrong[id]||0)+1});
-    if(ok){correct++;combo++;score+=10+Math.round(left)+(combo>=3?5*(combo-2):0);face("happy")}
-    else{combo=0;lives--;face(lives?"worried":"sad");try{navigator.vibrate&&navigator.vibrate(120)}catch(e){}
+    let add=0;
+    if(ok){correct++;combo++;bestCombo=Math.max(bestCombo,combo);add=(10+Math.round(left))*(q.type==="order"?2:1)+(combo>=3?5*(combo-2):0);score+=add;face("happy");
+      if(combo>=3&&combo%2===1){SFX.combo();confetti(sheetEl,40)}else SFX.ok(combo);buzz(30)}
+    else{combo=0;lives--;face(lives?"worried":"sad");SFX.bad();buzz([80,50,120]);sheetEl.classList.remove("hit");void sheetEl.offsetWidth;sheetEl.classList.add("hit");
       if(q.type==="order")q.items.slice().sort((a,b)=>hdKey(a.d)-hdKey(b.d)).forEach(x=>missed.push(x));else missed.push(q.ev)}
+    setScore(add);comboMsg(combo);
     const body=$g("#gm-body");
     if(q.type!=="order")body.querySelectorAll("[data-k]").forEach(b=>{if(q.opts[+b.dataset.k]===q.answer)b.classList.add("ok")});
     const fb=document.createElement("div");fb.className="gm-fb "+(ok?"ok":"bad");
-    fb.innerHTML=ok?`<b>${pick(["أحسنت!","صحيح!","برافو!","ممتاز!"],Date.now())}</b> ${esc(q.type==="order"?"الترتيب صحيح":q.ev.e+": "+hdFmt(q.ev.d))}`
-      :`<b>${timeout?"انتهى الوقت":"ليس هذا"}</b> ${q.type==="order"?q.items.slice().sort((a,b)=>hdKey(a.d)-hdKey(b.d)).map(x=>esc(x.e)+" ("+hdFmt(x.d)+")").join(" ← "):esc(q.ev.e)+": <b>"+hdFmt(q.ev.d)+"</b>"}`;
-    body.appendChild(fb);const nb=document.createElement("button");nb.className="btn block";nb.textContent=(i+1>=ROUND||lives<=0)?"النتيجة":"التالي";nb.onclick=()=>{i++;next()};body.appendChild(nb);hud()}
-  function end(quit){clearInterval(iv);g.plays=(g.plays||0)+1;const rec=score>(g.best||0);if(rec)g.best=score;save();
-    const acc=i?Math.round(correct/Math.max(1,Math.min(i+ (locked?1:0),ROUND))*100):0;
-    $g(".game").innerHTML=`<div class="gm-face pop">${MASCOT[correct>=7?"happy":correct>=4?"neutral":"worried"]}</div>
-     <h2 style="text-align:center">${rec&&score?"🏆 رقم قياسي جديد!":lives<=0?"انتهت القلوب!":"انتهت الجولة"}</h2>
-     <div class="stats"><div class="stat"><div class="k">النقاط</div><div class="v">${score}</div></div><div class="stat"><div class="k">إجابات صحيحة</div><div class="v">${correct}</div></div></div>
-     ${missed.length?`<div class="card col" style="box-shadow:none"><h3>راجع هذه التواريخ</h3>${[...new Map(missed.map(x=>[x.id,x])).values()].map(x=>`<div class="gm-rev"><b>${hdFmt(x.d)}</b><span>${esc(x.e)}</span></div>`).join("")}</div>`:`<p class="small muted" style="text-align:center">ولا خطأ واحد! راك تحفظ مليح.</p>`}
-     <div class="row"><button class="btn grow" id="gm-again">جولة أخرى</button><button class="btn ghost grow" id="gm-close">خروج</button></div>`;
+    fb.innerHTML=ok?`<b>${["أحسنت!","صحيح!","برافو!","ممتاز!","هايل!"][Math.floor(Math.random()*5)]}</b> ${esc(q.type==="order"?"الترتيب صحيح":q.ev.e+": "+hdFmt(q.ev.d))}`
+      :`<b>${timeout?"⏰ انتهى الوقت!":"ليس هذا"}</b> ${q.type==="order"?q.items.slice().sort((a,b)=>hdKey(a.d)-hdKey(b.d)).map(x=>esc(x.e)+" ("+hdFmt(x.d)+")").join(" ← "):esc(q.ev.e)+": <b>"+hdFmt(q.ev.d)+"</b>"}`;
+    body.appendChild(fb);const nb=document.createElement("button");nb.className="btn block";nb.textContent=(i+1>=ROUND||lives<=0)?"🏁 النتيجة":"التالي ←";nb.onclick=()=>{SFX.tap();i++;next()};body.appendChild(nb);hud()}
+  function end(quit){clearInterval(iv);locked=true;g.plays=(g.plays||0)+1;const before=rankOf(g.xp||0);g.xp=(g.xp||0)+score;const after=rankOf(g.xp);const rec=score>(g.best||0)&&score>0;if(rec)g.best=score;save();
+    const answered=Math.max(1,i+(q&&locked?1:0));const stars=lives<=0?(correct>=5?1:0):correct>=9?3:correct>=6?2:correct>=3?1:0;const up=after.name!==before.name;
+    const prog=after.next?Math.round((g.xp-after.from)/(after.next[0]-after.from)*100):100;
+    $g(".game").innerHTML=`<div class="gm-face pop">${MASCOT[stars>=2?"happy":stars===1?"neutral":"worried"]}</div>
+     <h2 style="text-align:center">${rec?"🏆 رقم قياسي جديد!":lives<=0?"💔 انتهت القلوب!":stars===3?"🌟 جولة مثالية!":"🏁 انتهت الجولة"}</h2>
+     <div class="gm-stars">${[1,2,3].map(k=>`<span class="${k<=stars?"on":""}" style="animation-delay:${k*.18}s">★</span>`).join("")}</div>
+     <div class="stats"><div class="stat"><div class="k">النقاط</div><div class="v">${score}</div></div><div class="stat"><div class="k">صحيحة · أطول سلسلة</div><div class="v">${correct}<small> · 🔥${bestCombo}</small></div></div></div>
+     <div class="gm-rank"><div class="row"><b class="grow">${up?"⬆️ رتبة جديدة: ":"رتبتك: "}${after.name}</b><span class="tiny">${g.xp} XP</span></div><div class="progress"><i style="width:${prog}%;background:var(--accent)"></i></div>${after.next?`<div class="tiny">باقي ${after.next[0]-g.xp} نقطة لتصبح «${after.next[1]}»</div>`:`<div class="tiny">وصلت لأعلى رتبة!</div>`}</div>
+     ${missed.length?`<div class="card col" style="box-shadow:none"><h3>📌 راجع هذه التواريخ</h3>${[...new Map(missed.map(x=>[x.id,x])).values()].map(x=>`<div class="gm-rev"><b>${hdFmt(x.d)}</b><span>${esc(x.e)}</span></div>`).join("")}</div>`:`<p class="small muted" style="text-align:center">ولا خطأ واحد! راك تحفظ مليح.</p>`}
+     <div class="row"><button class="btn grow" id="gm-again">🔄 جولة أخرى</button><button class="btn ghost grow" id="gm-close">خروج</button></div>`;
+    if(rec||up){SFX.record();confetti(sheetEl,120);buzz([60,40,60,40,150])}else if(lives<=0)SFX.lose();else SFX.end();
     $g("#gm-again").onclick=()=>{ov.remove();playGame(set)};$g("#gm-close").onclick=()=>{ov.remove();render()}}
-  next()}
+}
 
 /* ---------- backup & restore ---------- */
 function b64utf8(str){return btoa(unescape(encodeURIComponent(str)))}
