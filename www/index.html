@@ -403,7 +403,7 @@ function toast(t){const e=document.createElement("div");e.className="toast";e.te
 function avatar(){return S.photo?`<div class="avatar"><img src="${S.photo}" alt=""></div>`:`<div class="avatar">${esc(S.name.trim()[0]||"؟")}</div>`}
 
 function render(){
-  document.documentElement.dir="rtl";document.documentElement.lang="ar";
+  document.documentElement.dir="rtl";document.documentElement.lang="ar";applyTheme();
   if(!S){renderOnb();setIcon("happy");return}
   const md=mood();setIcon(md);
   const views={home:vHome,plan:vPlan,subjects:vSubjects,progress:vProgress,settings:vSettings,about:vAbout};
@@ -531,6 +531,9 @@ function vSettings(){
     <div class="choice">${Object.entries(MODES).map(([k,m])=>`<button class="opt" data-mode="${k}" aria-pressed="${S.mode===k}"><span class="grow"><b>${m.name}</b><span class="small muted">${m.desc}</span></span></button>`).join("")}</div>
     <div class="field"><label for="s-stream">الشعبة</label><select id="s-stream">${BAC.streams.map(s=>`<option value="${s.id}" ${s.id===S.stream?"selected":""}>${esc(s.name_ar)}</option>`).join("")}</select></div>
     ${st.options&&st.options.length?`<div class="field"><label for="s-opt">الخيار</label><select id="s-opt">${st.options.map(o=>`<option ${o===S.option?"selected":""}>${esc(o)}</option>`).join("")}</select></div>`:""}
+  </section>
+  <section class="card col"><h3>المظهر</h3>
+    <div class="lv" role="group" aria-label="المظهر">${[["auto","📱 حسب الهاتف"],["light","☀️ فاتح"],["dark","🌙 داكن"]].map(([k,t])=>`<button data-theme-pick="${k}" aria-pressed="${(S.theme||"auto")===k}">${t}</button>`).join("")}</div>
   </section>
   <section class="card col"><h3>التذكير اليومي</h3>
     <div class="field"><label for="s-rem">وقت التذكير</label><input id="s-rem" type="time" value="${S.remind}"></div>
@@ -874,6 +877,11 @@ function playGame(set,kind){const T=kind==="terms";const pool=T?(set==="all"?[..
     $g("#gm-again").onclick=()=>{ov.remove();playGame(set,kind)};$g("#gm-close").onclick=()=>{ov.remove();render()}}
 }
 
+/* ---------- theme: auto (follows the phone) / light / dark ---------- */
+function applyTheme(){const t=S&&S.theme;const r=document.documentElement;if(t==="light"||t==="dark")r.setAttribute("data-theme",t);else r.removeAttribute("data-theme");
+  const dark=t==="dark"||(t!=="light"&&matchMedia("(prefers-color-scheme: dark)").matches);let m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dark?"#090F0E":"#0A7458"}
+try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(!S||!S.theme||S.theme==="auto")applyTheme()})}catch(e){}
+
 /* ---------- daily splash ---------- */
 const DAILY=[
  ["🔥","الباك ماشي امتحان برك، هو الباب اللي يحلّ مستقبلك. افتحو بيدك!"],
@@ -939,6 +947,27 @@ function celebrate(subject,min){const st=streak();const ses=sessionsFor(today())
 
 /* light haptic tick on every button, like a game controller */
 document.addEventListener("click",e=>{const b=e.target.closest("button,.btn,.opt,.tool,.gamecard");if(b&&!b.disabled)buzz(8)},true);
+
+/* ---------- Android back button / back gesture ----------
+   Capacitor sends "back" to the WebView history, so we keep one trap entry in it and handle each press ourselves. */
+let backArmed=false,exitPending=false;
+function armBack(){if(!NATIVE||backArmed)return;try{history.pushState({trap:1},"");backArmed=true}catch(e){}}
+function handleBack(){
+  const sp=document.querySelector(".splash");if(sp){sp.remove();return true}
+  const ce=document.querySelector(".celebrate");if(ce){ce.remove();render();return true}
+  const ovs=document.querySelectorAll(".overlay");const ov=ovs[ovs.length-1];
+  if(ov){
+    if(ov.querySelector(".mock")){toast("الامتحان جارٍ. اضغط «أنهيت الامتحان» للخروج");return true}
+    const q=sel=>ov.querySelector(sel);
+    const btn=q("#gm-close")||q("#gm-quit")||q("#t-close")||q("#x-close")||q("[data-close]");
+    if(btn)btn.click();else{ov.remove();render()}
+    return true}
+  if(ui.tab!=="home"){ui.tab=ui.tab==="about"?(ui.back||"home"):"home";ui.confirmReset=false;render();window.scrollTo(0,0);return true}
+  return false}
+window.addEventListener("popstate",()=>{if(!NATIVE)return;backArmed=false;
+  if(handleBack()){armBack();return}
+  if(!exitPending){exitPending=true;toast("اضغط رجوع مرة أخرى للخروج");setTimeout(()=>{exitPending=false;armBack()},2000)}});
+setTimeout(armBack,300);
 
 /* ---------- backup & restore ---------- */
 function b64utf8(str){return btoa(unescape(encodeURIComponent(str)))}
@@ -1062,6 +1091,7 @@ function bind(){
   on("s-notif","click",askNotif);
   on("s-reset","click",()=>{ui.confirmReset=true;render()});
   on("s-backup","click",doBackup);
+  document.querySelectorAll("[data-theme-pick]").forEach(b=>b.onclick=()=>{S.theme=b.dataset.themePick;save();render()});
   document.querySelectorAll("[data-sgender]").forEach(b=>b.onclick=()=>{S.gender=b.dataset.sgender;save();render();nativeSync(true)});
   on("s-restore","change",e=>readBackup(e.target.files[0],st=>{ui.pendingRestore=st;render();showRestore()}));
   on("s-cancel","click",()=>{ui.confirmReset=false;render()});
